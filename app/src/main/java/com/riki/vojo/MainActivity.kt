@@ -1085,12 +1085,24 @@ fun GlovoDarkCard(place: Place, onClick: () -> Unit) {
         }
     }
 }
+
 @Composable
-fun ProfileScreen(navController: NavController) {
+fun ProfileScreen(
+    navController: NavController,
+    viewModel: com.riki.vojo.presentation.ProViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
+        factory = com.riki.vojo.presentation.ProViewModelFactory(LocalContext.current)
+    )
+) {
     val context = LocalContext.current
     val prefs = remember { context.getSharedPreferences("vojo_prefs", Context.MODE_PRIVATE) }
-    val prefManager = remember { PrefManager(context) }
-    var isUserPro by remember { mutableStateOf(prefManager.isPro()) }
+
+    // Używamy nowego ViewModelu do sprawdzania statusu PRO i awatarów
+    val isUserPro by viewModel.isProUser.collectAsState()
+    val selectedAvatarIndex by viewModel.selectedAvatarIndex.collectAsState()
+    val availableAvatars = viewModel.availableAvatars
+
+    // Szukamy wybranego awatara po indeksie (domyślnie pierwszy)
+    val currentAvatarResId = availableAvatars.find { it.id == selectedAvatarIndex }?.resId ?: R.drawable.colosseum
 
     val totalLearned = LearningManager.getTotalLearnedCount(context)
     val swipes = LearningManager.refreshAndGetTotal(context)
@@ -1099,31 +1111,10 @@ fun ProfileScreen(navController: NavController) {
 
     var userName by remember { mutableStateOf(prefs.getString("user_nick", "Vojo Explorer") ?: "Vojo Explorer") }
     var showGoProDialog by remember { mutableStateOf(false) }
-    var selectedAvatarResId by remember {
-        mutableIntStateOf(prefs.getInt("user_avatar_res", R.drawable.colosseum))
-    }
-
     var showEditDialog by remember { mutableStateOf(false) }
     var tempName by remember { mutableStateOf(userName) }
 
     val explorerLevel = (stampsCount * 2) + (totalLearned / 5)
-
-
-    val freeAvatars = listOf(
-        R.drawable.cezar,
-        R.drawable.colosseum,
-        R.drawable.vespa,
-        R.drawable.gladiator
-    )
-
-    val premiumAvatars = listOf(
-        R.drawable.italianflag,
-        R.drawable.pizza,
-        R.drawable.peter,
-        R.drawable.glad
-    )
-
-    val avatarOptions = if (isUserPro) freeAvatars + premiumAvatars else freeAvatars
 
     if (showEditDialog) {
         AlertDialog(
@@ -1147,13 +1138,19 @@ fun ProfileScreen(navController: NavController) {
                     Spacer(Modifier.height(20.dp))
                     Text("Select Your Avatar:", color = VojoTextGrey, fontSize = 12.sp)
                     Spacer(Modifier.height(12.dp))
-                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-                        avatarOptions.forEach { resId ->
+
+                    // Ładujemy awatary z ViewModelu, a nie ze starej listy
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(4),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        items(availableAvatars) { avatar ->
                             AvatarSelectionItem(
-                                resId = resId,
-                                isSelected = (selectedAvatarResId == resId)
+                                resId = avatar.resId,
+                                isSelected = (selectedAvatarIndex == avatar.id)
                             ) {
-                                selectedAvatarResId = resId
+                                viewModel.selectAvatar(avatar.id)
                             }
                         }
                     }
@@ -1163,10 +1160,7 @@ fun ProfileScreen(navController: NavController) {
                 Button(
                     onClick = {
                         userName = tempName
-                        prefs.edit()
-                            .putString("user_nick", userName)
-                            .putInt("user_avatar_res", selectedAvatarResId)
-                            .apply()
+                        prefs.edit().putString("user_nick", userName).apply()
                         showEditDialog = false
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = VojoGold)
@@ -1193,8 +1187,9 @@ fun ProfileScreen(navController: NavController) {
             Spacer(Modifier.height(24.dp))
 
             Box(contentAlignment = Alignment.BottomEnd, modifier = Modifier.clickable { showEditDialog = true }) {
+                // Wyświetlamy aktualny awatar pobrany z ViewModelu
                 Image(
-                    painter = painterResource(id = selectedAvatarResId),
+                    painter = painterResource(id = currentAvatarResId),
                     contentDescription = null,
                     modifier = Modifier
                         .size(110.dp)
@@ -1222,7 +1217,6 @@ fun ProfileScreen(navController: NavController) {
             }
 
             Spacer(Modifier.height(32.dp))
-
 
             Text(Translations.t("ACHIEVEMENTS"), modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Start, color = VojoTextGrey, fontSize = 12.sp, fontWeight = FontWeight.Bold)
             Spacer(Modifier.height(16.dp))
@@ -1277,22 +1271,22 @@ fun ProfileScreen(navController: NavController) {
 
             Spacer(Modifier.height(32.dp))
 
-
-            Button(
-                onClick = { showGoProDialog = true },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(60.dp),
-                shape = RoundedCornerShape(16.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = VojoGold)
-            ) {
-                Icon(Icons.Default.Stars, null, tint = VojoBlack)
-                Spacer(Modifier.width(12.dp))
-                Text("UPGRADE TO VOJO PRO", color = VojoBlack, fontWeight = FontWeight.ExtraBold, fontSize = 16.sp)
+            // Ukrywamy przycisk zakupu PRO, jeśli użytkownik już je ma
+            if (!isUserPro) {
+                Button(
+                    onClick = { showGoProDialog = true },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(60.dp),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = VojoGold)
+                ) {
+                    Icon(Icons.Default.Stars, null, tint = VojoBlack)
+                    Spacer(Modifier.width(12.dp))
+                    Text("UPGRADE TO VOJO PRO", color = VojoBlack, fontWeight = FontWeight.ExtraBold, fontSize = 16.sp)
+                }
+                Spacer(Modifier.height(12.dp))
             }
-
-            Spacer(Modifier.height(12.dp))
-
 
             Button(
                 onClick = { showEditDialog = true },
@@ -1315,38 +1309,18 @@ fun ProfileScreen(navController: NavController) {
             title = { Text("VOJO PRO", color = VojoGold, fontWeight = FontWeight.ExtraBold) },
             text = {
                 Column {
-                    OutlinedTextField(
-                        value = tempName,
-                        onValueChange = { if (it.length <= 15) tempName = it },
-                        label = { Text("Nickname", color = VojoGold) },
-                        singleLine = true,
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedTextColor = Color.White,
-                            unfocusedTextColor = Color.White,
-                            focusedBorderColor = VojoGold
-                        ),
-                        modifier = Modifier.fillMaxWidth()
+                    Text(
+                        "Unlock premium avatars, remove ads, and explore all interactive quests!",
+                        color = VojoTextGrey,
+                        fontSize = 14.sp
                     )
-                    Spacer(Modifier.height(20.dp))
-                    Text("Select Your Avatar:", color = VojoTextGrey, fontSize = 12.sp)
-                    Spacer(Modifier.height(12.dp))
-                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-                        avatarOptions.forEach { resId ->
-                            AvatarSelectionItem(
-                                resId = resId,
-                                isSelected = (selectedAvatarResId == resId)
-                            ) {
-                                selectedAvatarResId = resId
-                            }
-                        }
-                    }
                 }
             },
             confirmButton = {
                 Button(
                     onClick = {
-                        prefManager.setPro(true)
-                        isUserPro = true
+                        // Używamy nowej funkcji z ViewModelu do odblokowania PRO
+                        viewModel.unlockPro()
                         showGoProDialog = false
                         Toast.makeText(context, "Welcome to PRO! 👑", Toast.LENGTH_SHORT).show()
                     },
@@ -1358,6 +1332,7 @@ fun ProfileScreen(navController: NavController) {
         )
     }
 }
+
 
 
 @Composable

@@ -70,4 +70,6 @@
         implementation("androidx.browser:browser:1.8.0")
         implementation("io.github.sceneview:arsceneview:2.2.1")
         implementation("com.squareup.okhttp3:okhttp:4.12.0")
+        implementation("com.google.android.gms:play-services-ads:23.0.0")
+        implementation("androidx.datastore:datastore-preferences:1.0.0")
     }
