@@ -44,14 +44,25 @@ data class QuestMonument(
     val correctIndex: Int,
     val funFact: String,
     val xPercent: Float,
-    val isPro: Boolean
+    val isPro: Boolean,
+    val questType: QuestType = QuestType.QUIZ,
+    val emojiClues: String? = null,       // for EMOJI_DECODE
+    val fillBlankSentence: String? = null // for FILL_BLANK
 )
+
+enum class QuestType {
+    QUIZ,            // Classic multiple choice
+    EMOJI_DECODE,    // Guess the monument from emoji clues
+    TRUE_FALSE,      // True or False challenge
+    FILL_BLANK       // Fill in the blank
+}
+
 object QuestData {
     val monuments = listOf(
         QuestMonument(
             id = "colosseum",
             name = "Colosseum",
-            imageUrl = "https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=400&h=300&fit=crop",
+            imageUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Colosseo_2020.jpg/600px-Colosseo_2020.jpg",
             iconEmoji = "🏟️",
             question = "How many spectators could the Colosseum hold at its peak?",
             options = listOf("25,000", "50,000", "80,000", "120,000"),
@@ -60,22 +71,51 @@ object QuestData {
             xPercent = 0.5f,
             isPro = false
         ),
+        // 🧩 EMOJI DECODE QUEST
+        QuestMonument(
+            id = "gladiator_emoji",
+            name = "Arena Challenge",
+            imageUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Colosseo_2020.jpg/600px-Colosseo_2020.jpg",
+            iconEmoji = "⚔️",
+            question = "Which ancient Rome fighter do these emojis represent?\n\n⚔️🛡️🏟️💪🗡️",
+            options = listOf("Gladiator", "Centurion", "Legionary", "Senator"),
+            correctIndex = 0,
+            funFact = "Gladiators were often celebrities in ancient Rome! They had fan clubs, and women would pay large sums for their sweat, which was believed to be an aphrodisiac. Some gladiators even endorsed products!",
+            xPercent = 0.55f,
+            isPro = false,
+            questType = QuestType.EMOJI_DECODE,
+            emojiClues = "⚔️🛡️🏟️💪🗡️"
+        ),
         QuestMonument(
             id = "pantheon",
             name = "Pantheon",
-            imageUrl = "https://images.unsplash.com/photo-1583265627959-fb7042f5133b?w=400&h=300&fit=crop",
+            imageUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Pantheon_Rom_1_cropped.jpg/600px-Pantheon_Rom_1_cropped.jpg",
             iconEmoji = "🏛️",
             question = "What is unique about the Pantheon's dome?",
             options = listOf("It is made of gold", "It has no supporting pillars", "It has an open hole (oculus) at the top", "It was built in one day"),
             correctIndex = 2,
             funFact = "The Pantheon's oculus is 9 meters wide and is the only source of light. When it rains, water falls through the hole but drains away through 22 almost-invisible holes in the floor!",
             xPercent = 0.25f,
-            isPro = true
+            isPro = false
+        ),
+        // ✅❌ TRUE/FALSE QUEST
+        QuestMonument(
+            id = "pantheon_tf",
+            name = "Fact or Fiction?",
+            imageUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Pantheon_Rom_1_cropped.jpg/600px-Pantheon_Rom_1_cropped.jpg",
+            iconEmoji = "🤔",
+            question = "TRUE or FALSE: The Pantheon's concrete dome is still the largest unreinforced concrete dome in the world after 2,000 years.",
+            options = listOf("TRUE ✅", "FALSE ❌"),
+            correctIndex = 0,
+            funFact = "It's TRUE! The Pantheon's dome (43.3m diameter) remains the world's largest unreinforced concrete dome. Modern engineers still can't fully explain how ancient Romans achieved this. The concrete gets progressively lighter towards the top, using volcanic pumice near the oculus!",
+            xPercent = 0.3f,
+            isPro = true,
+            questType = QuestType.TRUE_FALSE
         ),
         QuestMonument(
             id = "trevi",
             name = "Trevi Fountain",
-            imageUrl = "https://images.unsplash.com/photo-1525874684015-58379d421a52?w=400&h=300&fit=crop",
+            imageUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Trevi_Fountain_-_Roma.jpg/600px-Trevi_Fountain_-_Roma.jpg",
             iconEmoji = "⛲",
             question = "How much money is thrown into the Trevi Fountain each year?",
             options = listOf("About €100,000", "About €500,000", "About €1.5 million", "About €5 million"),
@@ -84,10 +124,25 @@ object QuestData {
             xPercent = 0.72f,
             isPro = true
         ),
+        // 😀 EMOJI DECODE QUEST
+        QuestMonument(
+            id = "emoji_landmark",
+            name = "Emoji Decode",
+            imageUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Trevi_Fountain_-_Roma.jpg/600px-Trevi_Fountain_-_Roma.jpg",
+            iconEmoji = "🧩",
+            question = "Which Roman landmark do these emojis represent?\n\n💧⛲🪙🤞✨",
+            options = listOf("Baths of Caracalla", "Trevi Fountain", "Navona Fountain", "Aqua Virgo"),
+            correctIndex = 1,
+            funFact = "The tradition of throwing coins into the Trevi says: 1 coin = return to Rome, 2 coins = find love in Rome, 3 coins = get married in Rome! The fountain is fed by a 2,000-year-old Roman aqueduct called Aqua Virgo!",
+            xPercent = 0.68f,
+            isPro = true,
+            questType = QuestType.EMOJI_DECODE,
+            emojiClues = "💧⛲🪙🤞✨"
+        ),
         QuestMonument(
             id = "vatican",
             name = "St. Peter's Basilica",
-            imageUrl = "https://images.unsplash.com/photo-1531572753322-ad063cecc140?w=400&h=300&fit=crop",
+            imageUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Basilica_di_San_Pietro_in_Vaticano_September_2015-1a.jpg/600px-Basilica_di_San_Pietro_in_Vaticano_September_2015-1a.jpg",
             iconEmoji = "⛪",
             question = "Who designed the dome of St. Peter's Basilica?",
             options = listOf("Leonardo da Vinci", "Michelangelo", "Raphael", "Bernini"),
@@ -99,7 +154,7 @@ object QuestData {
         QuestMonument(
             id = "spanish_steps",
             name = "Spanish Steps",
-            imageUrl = "https://images.unsplash.com/photo-1569154941061-e231b4725ef1?w=400&h=300&fit=crop",
+            imageUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Piazza_di_Spagna_%28Rome%29_0004.jpg/600px-Piazza_di_Spagna_%28Rome%29_0004.jpg",
             iconEmoji = "🪜",
             question = "How many steps make up the Spanish Steps?",
             options = listOf("100", "135", "150", "200"),
@@ -108,10 +163,24 @@ object QuestData {
             xPercent = 0.65f,
             isPro = true
         ),
+        // ✅❌ TRUE/FALSE QUEST #2
+        QuestMonument(
+            id = "bernini_tf",
+            name = "Bernini Challenge",
+            imageUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Piazza_Navona_%28Rome%29_at_night.jpg/600px-Piazza_Navona_%28Rome%29_at_night.jpg",
+            iconEmoji = "🎨",
+            question = "TRUE or FALSE: Bernini designed both the colonnade of St. Peter's Square AND the Fountain of the Four Rivers in Piazza Navona.",
+            options = listOf("TRUE ✅", "FALSE ❌"),
+            correctIndex = 0,
+            funFact = "It's TRUE! Gian Lorenzo Bernini created over 60 masterpieces in Rome! He designed the colonnade of St. Peter's Square, the Fountain of the Four Rivers in Piazza Navona, and sculpted the famous 'Ecstasy of Saint Teresa'. He started sculpting at age 8!",
+            xPercent = 0.38f,
+            isPro = true,
+            questType = QuestType.TRUE_FALSE
+        ),
         QuestMonument(
             id = "forum",
             name = "Roman Forum",
-            imageUrl = "https://images.unsplash.com/photo-1604580864964-0462f5d5b1a8?w=400&h=300&fit=crop",
+            imageUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Foro_Romano_Musei_Capitolini_Roma.jpg/600px-Foro_Romano_Musei_Capitolini_Roma.jpg",
             iconEmoji = "🏗️",
             question = "What was the Roman Forum primarily used for?",
             options = listOf("Military training grounds", "Public gatherings, commerce, and politics", "Religious ceremonies only", "Gladiator fights"),
@@ -123,7 +192,7 @@ object QuestData {
         QuestMonument(
             id = "castel",
             name = "Castel Sant'Angelo",
-            imageUrl = "https://images.unsplash.com/photo-1584698964176-8e8a7b9e44f5?w=400&h=300&fit=crop",
+            imageUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Castel_Sant%27_Angelo_Between_Leaves.jpg/600px-Castel_Sant%27_Angelo_Between_Leaves.jpg",
             iconEmoji = "🏰",
             question = "What was Castel Sant'Angelo originally built as?",
             options = listOf("A prison", "A mausoleum for Emperor Hadrian", "A fortress", "A church"),
@@ -135,7 +204,7 @@ object QuestData {
         QuestMonument(
             id = "navona",
             name = "Piazza Navona",
-            imageUrl = "https://images.unsplash.com/photo-1603228254119-e6a4d095dc59?w=400&h=300&fit=crop",
+            imageUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Piazza_Navona_%28Rome%29_at_night.jpg/600px-Piazza_Navona_%28Rome%29_at_night.jpg",
             iconEmoji = "🎭",
             question = "What was the original purpose of Piazza Navona's elongated shape?",
             options = listOf("It was a marketplace", "It was built on a Roman stadium", "It was designed for parades", "It was a river port"),
@@ -143,8 +212,494 @@ object QuestData {
             funFact = "Piazza Navona was built on the ruins of the Stadium of Domitian (1st century AD). Until the 19th century, the square was regularly flooded on weekends in August so that Romans could wade and play in the water to escape the summer heat!",
             xPercent = 0.35f,
             isPro = true
+        ),
+        // ─── NEW QUESTS (13-20) ───
+        // 🧩 EMOJI DECODE: Trastevere
+        QuestMonument(
+            id = "trastevere_emoji",
+            name = "Trastevere Decode",
+            imageUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/01_Santa_Maria_in_Trastevere_Facade.jpg/600px-01_Santa_Maria_in_Trastevere_Facade.jpg",
+            iconEmoji = "🍷",
+            question = "Which charming Roman neighborhood do these emojis represent?\n\n🍷🌙🎶🏘️✨",
+            options = listOf("Trastevere", "Testaccio", "Monti", "Prati"),
+            correctIndex = 0,
+            funFact = "Trastevere means 'across the Tiber'. In ancient Rome, it was home to immigrants and sailors. Today it's Rome's most bohemian neighborhood — its narrow cobblestone streets are covered in ivy and filled with live music every evening!",
+            xPercent = 0.42f,
+            isPro = true,
+            questType = QuestType.EMOJI_DECODE,
+            emojiClues = "🍷🌙🎶🏘️✨"
+        ),
+        // 🏛️ QUIZ: Circus Maximus
+        QuestMonument(
+            id = "circus_maximus",
+            name = "Circus Maximus",
+            imageUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Circus_Maximus_in_Rome.jpg/600px-Circus_Maximus_in_Rome.jpg",
+            iconEmoji = "🐎",
+            question = "How many spectators could the Circus Maximus hold for chariot races?",
+            options = listOf("50,000", "100,000", "150,000", "250,000"),
+            correctIndex = 3,
+            funFact = "The Circus Maximus could seat 250,000 spectators — over 3x the Colosseum! Chariot races were the most popular sport in ancient Rome. Drivers were celebrities, and fans organized into factions (Blues, Greens, Reds, Whites) that sometimes caused riots!",
+            xPercent = 0.48f,
+            isPro = true
+        ),
+        // ✅❌ TRUE/FALSE: Catacombs
+        QuestMonument(
+            id = "catacombs_tf",
+            name = "Catacomb Mystery",
+            imageUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Rome-Catacombs001.jpg/600px-Rome-Catacombs001.jpg",
+            iconEmoji = "💀",
+            question = "TRUE or FALSE: Rome's underground catacombs stretch over 150 kilometers — longer than the Rome Metro system.",
+            options = listOf("TRUE ✅", "FALSE ❌"),
+            correctIndex = 0,
+            funFact = "It's TRUE! Rome's catacombs are an underground city of the dead, stretching over 150km with an estimated 750,000 burial sites! The Catacombs of San Callisto alone have 20km of tunnels on 4 levels, reaching 20 meters underground.",
+            xPercent = 0.52f,
+            isPro = true,
+            questType = QuestType.TRUE_FALSE
+        ),
+        // 🏛️ QUIZ: Villa Borghese
+        QuestMonument(
+            id = "borghese",
+            name = "Villa Borghese",
+            imageUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Galleria_Borghese_%2846755302%29.jpeg/600px-Galleria_Borghese_%2846755302%29.jpeg",
+            iconEmoji = "🎨",
+            question = "Which sculptor created the famous 'Apollo and Daphne' in the Borghese Gallery?",
+            options = listOf("Michelangelo", "Donatello", "Bernini", "Canova"),
+            correctIndex = 2,
+            funFact = "Bernini sculpted 'Apollo and Daphne' when he was just 24 years old! The marble sculpture captures the exact moment of Daphne transforming into a laurel tree — her fingers turning into leaves and bark growing up her legs. It's considered one of the greatest sculptures ever made.",
+            xPercent = 0.56f,
+            isPro = true
+        ),
+        // 📝 FILL_BLANK: Via Appia
+        QuestMonument(
+            id = "appian_way",
+            name = "Via Appia Antica",
+            imageUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Via_Appia_Antica_Rome.jpg/600px-Via_Appia_Antica_Rome.jpg",
+            iconEmoji = "🛤️",
+            question = "Complete the famous saying about the Roman road system:",
+            options = listOf("Rome", "Victory", "Glory", "Caesar"),
+            correctIndex = 0,
+            funFact = "The Via Appia (Appian Way) was built in 312 BC and called 'Regina Viarum' (Queen of Roads). It's one of the oldest and most important Roman roads, stretching 563 km from Rome to Brindisi. Parts of the original Roman stones are still walkable today — making it over 2,300 years old!",
+            xPercent = 0.6f,
+            isPro = true,
+            questType = QuestType.FILL_BLANK,
+            fillBlankSentence = "All roads lead to ___"
+        ),
+        // ✅❌ TRUE/FALSE: Tiber Island
+        QuestMonument(
+            id = "tiberina",
+            name = "Tiber Island",
+            imageUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Isola_Tiberina_-_Roma.jpg/600px-Isola_Tiberina_-_Roma.jpg",
+            iconEmoji = "🏝️",
+            question = "TRUE or FALSE: The Pons Fabricius connecting Tiber Island to the mainland is the oldest bridge in Rome, built in 62 BC.",
+            options = listOf("TRUE ✅", "FALSE ❌"),
+            correctIndex = 0,
+            funFact = "It's TRUE! The Pons Fabricius (Ponte Fabricio) was built in 62 BC and is still standing — making it over 2,000 years old! Legend says Tiber Island was formed when Romans threw the tyrant king Tarquinius's wheat harvest into the river, where mud collected around it to form an island.",
+            xPercent = 0.64f,
+            isPro = true,
+            questType = QuestType.TRUE_FALSE
+        ),
+        // 🧩 EMOJI DECODE: Julius Caesar
+        QuestMonument(
+            id = "julius_emoji",
+            name = "Caesar's Legacy",
+            imageUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Largo_di_Torre_Argentina_din%C3%A0mica.jpg/600px-Largo_di_Torre_Argentina_din%C3%A0mica.jpg",
+            iconEmoji = "👑",
+            question = "Which famous Roman leader do these emojis represent?\n\n🗡️👑🏛️📜⚔️",
+            options = listOf("Julius Caesar", "Augustus", "Nero", "Marcus Aurelius"),
+            correctIndex = 0,
+            funFact = "Julius Caesar was assassinated on March 15, 44 BC (the Ides of March) by a group of senators at the Theatre of Pompey — which is now the site of Largo di Torre Argentina, where you can also see Rome's famous cat sanctuary! Caesar's last words are debated — 'Et tu, Brute?' may be Shakespeare's invention.",
+            xPercent = 0.68f,
+            isPro = true,
+            questType = QuestType.EMOJI_DECODE,
+            emojiClues = "🗡️👑🏛️📜⚔️"
+        ),
+        // 🏛️ QUIZ: Bocca della Verità
+        QuestMonument(
+            id = "mouth_truth",
+            name = "Bocca della Verità",
+            imageUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Bocca_della_Verit%C3%A0_-_Santa_Maria_in_Cosmedin.jpg/480px-Bocca_della_Verit%C3%A0_-_Santa_Maria_in_Cosmedin.jpg",
+            iconEmoji = "👄",
+            question = "According to legend, what happens if you put your hand in the Mouth of Truth and tell a lie?",
+            options = listOf("You turn to stone", "The mouth bites your hand off", "You hear thunder", "The ground shakes"),
+            correctIndex = 1,
+            funFact = "The Bocca della Verità (Mouth of Truth) is actually an ancient Roman drain cover, probably depicting the face of the sea god Oceanus. The legend of the lie-detecting mouth became world-famous after the 1953 movie 'Roman Holiday' with Audrey Hepburn and Gregory Peck — tourists queue for hours just to put their hand in!",
+            xPercent = 0.72f,
+            isPro = true
         )
     )
+}
+
+/** Translation system for all quest content */
+object QuestTranslations {
+    data class QuestText(
+        val name: Map<Translations.Lang, String>? = null,
+        val question: Map<Translations.Lang, String>,
+        val options: Map<Translations.Lang, List<String>>? = null,
+        val funFact: Map<Translations.Lang, String>? = null,
+        val fillBlank: Map<Translations.Lang, String>? = null
+    )
+
+    private val translations = mapOf(
+        "colosseum" to QuestText(
+            name = mapOf(Translations.Lang.IT to "Colosseo", Translations.Lang.ES to "Coliseo", Translations.Lang.PL to "Koloseum"),
+            question = mapOf(
+                Translations.Lang.IT to "Quanti spettatori poteva contenere il Colosseo al suo apice?",
+                Translations.Lang.ES to "¿Cuántos espectadores podía albergar el Coliseo en su apogeo?",
+                Translations.Lang.PL to "Ilu widzów mógł pomieścić Koloseum w szczytowym okresie?"
+            ),
+            funFact = mapOf(
+                Translations.Lang.IT to "Il Colosseo poteva essere allagato per inscenare battaglie navali chiamate \"naumachiae\". Gli ingegneri costruirono un elaborato sistema di canali e acquedotti sotto il pavimento dell'arena!",
+                Translations.Lang.ES to "¡El Coliseo podía inundarse para representar batallas navales llamadas \"naumaquias\"! Los ingenieros construyeron un elaborado sistema de canales y acueductos bajo el suelo de la arena.",
+                Translations.Lang.PL to "Koloseum mogło być zalewane wodą do inscenizacji bitew morskich zwanych \"naumachiae\". Inżynierowie zbudowali skomplikowany system kanałów i akweduktów pod podłogą areny!"
+            )
+        ),
+        "gladiator_emoji" to QuestText(
+            question = mapOf(
+                Translations.Lang.IT to "Quale combattente dell'antica Roma rappresentano questi emoji?\n\n⚔️🛡️🏟️💪🗡️",
+                Translations.Lang.ES to "¿Qué luchador de la antigua Roma representan estos emojis?\n\n⚔️🛡️🏟️💪🗡️",
+                Translations.Lang.PL to "Którego wojownika starożytnego Rzymu reprezentują te emoji?\n\n⚔️🛡️🏟️💪🗡️"
+            ),
+            options = mapOf(
+                Translations.Lang.IT to listOf("Gladiatore", "Centurione", "Legionario", "Senatore"),
+                Translations.Lang.ES to listOf("Gladiador", "Centurión", "Legionario", "Senador"),
+                Translations.Lang.PL to listOf("Gladiator", "Centurion", "Legionista", "Senator")
+            ),
+            funFact = mapOf(
+                Translations.Lang.IT to "I gladiatori erano spesso celebrità nell'antica Roma! Avevano fan club, e le donne pagavano grandi somme per il loro sudore, che si credeva fosse un afrodisiaco.",
+                Translations.Lang.ES to "¡Los gladiadores eran celebridades en la antigua Roma! Tenían clubes de fans, y las mujeres pagaban grandes sumas por su sudor, que se creía que era un afrodisíaco.",
+                Translations.Lang.PL to "Gladiatorzy byli często celebrytami w starożytnym Rzymie! Mieli kluby fanów, a kobiety płaciły duże sumy za ich pot, który uważano za afrodyzjak."
+            )
+        ),
+        "pantheon" to QuestText(
+            question = mapOf(
+                Translations.Lang.IT to "Cosa ha di unico la cupola del Pantheon?",
+                Translations.Lang.ES to "¿Qué tiene de único la cúpula del Panteón?",
+                Translations.Lang.PL to "Co jest wyjątkowego w kopule Panteonu?"
+            ),
+            options = mapOf(
+                Translations.Lang.IT to listOf("È fatta d'oro", "Non ha pilastri di sostegno", "Ha un foro aperto (oculo) in cima", "Fu costruita in un giorno"),
+                Translations.Lang.ES to listOf("Está hecha de oro", "No tiene pilares de soporte", "Tiene un agujero abierto (óculo) en la cima", "Fue construida en un día"),
+                Translations.Lang.PL to listOf("Jest zrobiona ze złota", "Nie ma podpierających filarów", "Ma otwarty otwór (okulus) na szczycie", "Została zbudowana w jeden dzień")
+            ),
+            funFact = mapOf(
+                Translations.Lang.IT to "L'oculo del Pantheon è largo 9 metri ed è l'unica fonte di luce. Quando piove, l'acqua cade attraverso il foro ma defluisce attraverso 22 fori quasi invisibili nel pavimento!",
+                Translations.Lang.ES to "El óculo del Panteón mide 9 metros de ancho y es la única fuente de luz. Cuando llueve, el agua cae por el agujero pero drena a través de 22 agujeros casi invisibles en el suelo.",
+                Translations.Lang.PL to "Okulus Panteonu ma 9 metrów szerokości i jest jedynym źródłem światła. Gdy pada deszcz, woda spada przez otwór, ale odpływa przez 22 prawie niewidoczne otwory w podłodze!"
+            )
+        ),
+        "pantheon_tf" to QuestText(
+            question = mapOf(
+                Translations.Lang.IT to "VERO o FALSO: La cupola in cemento del Pantheon è ancora la più grande cupola in cemento non armato del mondo dopo 2.000 anni.",
+                Translations.Lang.ES to "VERDADERO o FALSO: La cúpula de hormigón del Panteón sigue siendo la cúpula de hormigón no armado más grande del mundo después de 2.000 años.",
+                Translations.Lang.PL to "PRAWDA czy FAŁSZ: Betonowa kopuła Panteonu jest nadal największą niezbrojoną kopułą betonową na świecie po 2000 lat."
+            ),
+            options = mapOf(
+                Translations.Lang.IT to listOf("VERO ✅", "FALSO ❌"),
+                Translations.Lang.ES to listOf("VERDADERO ✅", "FALSO ❌"),
+                Translations.Lang.PL to listOf("PRAWDA ✅", "FAŁSZ ❌")
+            ),
+            funFact = mapOf(
+                Translations.Lang.IT to "È VERO! La cupola del Pantheon (43,3 m di diametro) resta la più grande cupola in cemento non armato del mondo. Il cemento diventa progressivamente più leggero verso l'alto, usando pomice vulcanica vicino all'oculo!",
+                Translations.Lang.ES to "¡Es VERDADERO! La cúpula del Panteón (43,3 m de diámetro) sigue siendo la cúpula de hormigón no armado más grande del mundo. El hormigón se vuelve progresivamente más ligero hacia arriba, usando piedra pómez volcánica cerca del óculo.",
+                Translations.Lang.PL to "To PRAWDA! Kopuła Panteonu (43,3 m średnicy) pozostaje największą niezbrojoną kopułą betonową na świecie. Beton staje się stopniowo lżejszy ku górze, z użyciem wulkanicznego pumeksu przy okulusie!"
+            )
+        ),
+        "trevi" to QuestText(
+            name = mapOf(Translations.Lang.IT to "Fontana di Trevi", Translations.Lang.ES to "Fontana de Trevi", Translations.Lang.PL to "Fontanna di Trevi"),
+            question = mapOf(
+                Translations.Lang.IT to "Quanti soldi vengono gettati nella Fontana di Trevi ogni anno?",
+                Translations.Lang.ES to "¿Cuánto dinero se tira a la Fontana de Trevi cada año?",
+                Translations.Lang.PL to "Ile pieniędzy wrzuca się do Fontanny di Trevi każdego roku?"
+            ),
+            options = mapOf(
+                Translations.Lang.IT to listOf("Circa €100.000", "Circa €500.000", "Circa €1,5 milioni", "Circa €5 milioni"),
+                Translations.Lang.ES to listOf("Unos €100.000", "Unos €500.000", "Unos €1,5 millones", "Unos €5 millones"),
+                Translations.Lang.PL to listOf("Około €100.000", "Około €500.000", "Około €1,5 miliona", "Około €5 milionów")
+            ),
+            funFact = mapOf(
+                Translations.Lang.IT to "Circa €1,5 milioni vengono gettati nella Fontana di Trevi ogni anno! Il denaro viene raccolto ogni notte e donato alla Caritas, un'organizzazione cattolica che finanzia un supermercato per i poveri a Roma.",
+                Translations.Lang.ES to "¡Aproximadamente €1,5 millones se tiran a la Fontana de Trevi anualmente! El dinero se recoge cada noche y se dona a Cáritas, una organización católica que financia un supermercado para los pobres en Roma.",
+                Translations.Lang.PL to "Około €1,5 miliona jest wrzucane do Fontanny di Trevi każdego roku! Pieniądze są zbierane co noc i przekazywane Caritas, katolickiej organizacji charytatywnej finansującej supermarket dla ubogich w Rzymie."
+            )
+        ),
+        "emoji_landmark" to QuestText(
+            question = mapOf(
+                Translations.Lang.IT to "Quale monumento romano rappresentano questi emoji?\n\n💧⛲🪙🤞✨",
+                Translations.Lang.ES to "¿Qué monumento romano representan estos emojis?\n\n💧⛲🪙🤞✨",
+                Translations.Lang.PL to "Który rzymski zabytek reprezentują te emoji?\n\n💧⛲🪙🤞✨"
+            ),
+            options = mapOf(
+                Translations.Lang.IT to listOf("Terme di Caracalla", "Fontana di Trevi", "Fontana di Navona", "Acqua Vergine"),
+                Translations.Lang.ES to listOf("Termas de Caracalla", "Fontana de Trevi", "Fuente de Navona", "Aqua Virgo"),
+                Translations.Lang.PL to listOf("Termy Karakalli", "Fontanna di Trevi", "Fontanna Navona", "Aqua Virgo")
+            ),
+            funFact = mapOf(
+                Translations.Lang.IT to "La tradizione di gettare monete nella Fontana di Trevi dice: 1 moneta = tornare a Roma, 2 monete = trovare l'amore a Roma, 3 monete = sposarsi a Roma!",
+                Translations.Lang.ES to "La tradición de lanzar monedas a la Fontana de Trevi dice: 1 moneda = volver a Roma, 2 monedas = encontrar el amor en Roma, 3 monedas = casarse en Roma.",
+                Translations.Lang.PL to "Tradycja wrzucania monet do fontanny mówi: 1 moneta = powrót do Rzymu, 2 monety = znalezienie miłości w Rzymie, 3 monety = ślub w Rzymie!"
+            )
+        ),
+        "vatican" to QuestText(
+            name = mapOf(Translations.Lang.IT to "Basilica di San Pietro", Translations.Lang.ES to "Basílica de San Pedro", Translations.Lang.PL to "Bazylika Świętego Piotra"),
+            question = mapOf(
+                Translations.Lang.IT to "Chi ha progettato la cupola della Basilica di San Pietro?",
+                Translations.Lang.ES to "¿Quién diseñó la cúpula de la Basílica de San Pedro?",
+                Translations.Lang.PL to "Kto zaprojektował kopułę Bazyliki Świętego Piotra?"
+            ),
+            options = mapOf(
+                Translations.Lang.IT to listOf("Leonardo da Vinci", "Michelangelo", "Raffaello", "Bernini"),
+                Translations.Lang.ES to listOf("Leonardo da Vinci", "Miguel Ángel", "Rafael", "Bernini"),
+                Translations.Lang.PL to listOf("Leonardo da Vinci", "Michał Anioł", "Rafael", "Bernini")
+            ),
+            funFact = mapOf(
+                Translations.Lang.IT to "Michelangelo progettò la cupola a 71 anni e non la vide mai completata. La cupola è così grande che la Statua della Libertà potrebbe entrarci! Ci vollero 22 anni per costruirla.",
+                Translations.Lang.ES to "Miguel Ángel diseñó la cúpula a los 71 años y nunca la vio terminada. ¡La cúpula es tan grande que la Estatua de la Libertad podría caber dentro! Tardó 22 años en construirse.",
+                Translations.Lang.PL to "Michał Anioł zaprojektował kopułę w wieku 71 lat i nigdy nie zobaczył jej ukończonej. Kopuła jest tak duża, że Statua Wolności zmieściłaby się w środku! Budowa trwała 22 lata."
+            )
+        ),
+        "spanish_steps" to QuestText(
+            name = mapOf(Translations.Lang.IT to "Scalinata di Trinità", Translations.Lang.ES to "Escalinata Española", Translations.Lang.PL to "Schody Hiszpańskie"),
+            question = mapOf(
+                Translations.Lang.IT to "Quanti gradini compongono la Scalinata di Trinità dei Monti?",
+                Translations.Lang.ES to "¿Cuántos escalones tiene la Escalinata Española?",
+                Translations.Lang.PL to "Ile stopni ma Schodów Hiszpańskich?"
+            ),
+            funFact = mapOf(
+                Translations.Lang.IT to "I 135 gradini furono costruiti nel 1723-1725 per collegare l'Ambasciata di Spagna alla chiesa di Trinità dei Monti. Mangiare sui gradini è vietato dal 2019 — puoi essere multato fino a €400!",
+                Translations.Lang.ES to "Los 135 escalones se construyeron en 1723-1725 para conectar la Embajada de España con la iglesia Trinità dei Monti. ¡Comer en los escalones se prohibió en 2019, con multas de hasta €400!",
+                Translations.Lang.PL to "135 stopni zbudowano w latach 1723-1725, aby połączyć Ambasadę Hiszpanii z kościołem Trinità dei Monti. Jedzenie na schodach zostało zakazane w 2019 — możesz dostać mandat do €400!"
+            )
+        ),
+        "bernini_tf" to QuestText(
+            question = mapOf(
+                Translations.Lang.IT to "VERO o FALSO: Bernini ha progettato sia il colonnato di Piazza San Pietro che la Fontana dei Quattro Fiumi a Piazza Navona.",
+                Translations.Lang.ES to "VERDADERO o FALSO: Bernini diseñó tanto la columnata de la Plaza de San Pedro como la Fuente de los Cuatro Ríos en la Piazza Navona.",
+                Translations.Lang.PL to "PRAWDA czy FAŁSZ: Bernini zaprojektował zarówno kolumnadę Placu Świętego Piotra, jak i Fontannę Czterech Rzek na Piazza Navona."
+            ),
+            options = mapOf(
+                Translations.Lang.IT to listOf("VERO ✅", "FALSO ❌"),
+                Translations.Lang.ES to listOf("VERDADERO ✅", "FALSO ❌"),
+                Translations.Lang.PL to listOf("PRAWDA ✅", "FAŁSZ ❌")
+            ),
+            funFact = mapOf(
+                Translations.Lang.IT to "È VERO! Gian Lorenzo Bernini creò oltre 60 capolavori a Roma! Progettò il colonnato di Piazza San Pietro, la Fontana dei Quattro Fiumi e scolpì la famosa 'Estasi di Santa Teresa'. Iniziò a scolpire a 8 anni!",
+                Translations.Lang.ES to "¡Es VERDADERO! Gian Lorenzo Bernini creó más de 60 obras maestras en Roma. Diseñó la columnata de la Plaza de San Pedro, la Fuente de los Cuatro Ríos y esculpió el famoso 'Éxtasis de Santa Teresa'. ¡Empezó a esculpir a los 8 años!",
+                Translations.Lang.PL to "To PRAWDA! Gian Lorenzo Bernini stworzył ponad 60 arcydzieł w Rzymie! Zaprojektował kolumnadę Placu św. Piotra, Fontannę Czterech Rzek i wyrzeźbił słynną 'Ekstazę św. Teresy'. Zaczął rzeźbić w wieku 8 lat!"
+            )
+        ),
+        "forum" to QuestText(
+            name = mapOf(Translations.Lang.IT to "Foro Romano", Translations.Lang.ES to "Foro Romano", Translations.Lang.PL to "Forum Romanum"),
+            question = mapOf(
+                Translations.Lang.IT to "A cosa serviva principalmente il Foro Romano?",
+                Translations.Lang.ES to "¿Para qué se usaba principalmente el Foro Romano?",
+                Translations.Lang.PL to "Do czego służyło głównie Forum Romanum?"
+            ),
+            options = mapOf(
+                Translations.Lang.IT to listOf("Campi d'addestramento", "Assemblee, commercio e politica", "Solo cerimonie religiose", "Combattimenti dei gladiatori"),
+                Translations.Lang.ES to listOf("Campos de entrenamiento", "Reuniones, comercio y política", "Solo ceremonias religiosas", "Luchas de gladiadores"),
+                Translations.Lang.PL to listOf("Place ćwiczeń wojskowych", "Zgromadzenia, handel i polityka", "Tylko ceremonie religijne", "Walki gladiatorów")
+            ),
+            funFact = mapOf(
+                Translations.Lang.IT to "Il Foro Romano fu il cuore pulsante della vita pubblica per secoli. Giulio Cesare fu cremato qui nel 44 a.C., e i romani gettarono così tante offerte nel rogo che dovettero chiamare i vigili del fuoco!",
+                Translations.Lang.ES to "El Foro Romano fue el corazón de la vida pública durante siglos. Julio César fue cremado aquí en el 44 a.C., ¡y los romanos lanzaron tantas ofrendas a la pira que tuvieron que llamar a los bomberos!",
+                Translations.Lang.PL to "Forum Romanum było bijącym sercem życia publicznego przez wieki. Juliusz Cezar został tu skremowany w 44 r. p.n.e., a Rzymianie wrzucili tyle darów na stos, że trzeba było wezwać straż pożarną!"
+            )
+        ),
+        "castel" to QuestText(
+            question = mapOf(
+                Translations.Lang.IT to "Come cosa fu originariamente costruito Castel Sant'Angelo?",
+                Translations.Lang.ES to "¿Como qué fue construido originalmente el Castillo de Sant'Angelo?",
+                Translations.Lang.PL to "Jako co pierwotnie zbudowano Zamek Świętego Anioła?"
+            ),
+            options = mapOf(
+                Translations.Lang.IT to listOf("Una prigione", "Un mausoleo per l'imperatore Adriano", "Una fortezza", "Una chiesa"),
+                Translations.Lang.ES to listOf("Una prisión", "Un mausoleo para el emperador Adriano", "Una fortaleza", "Una iglesia"),
+                Translations.Lang.PL to listOf("Więzienie", "Mauzoleum cesarza Hadriana", "Forteca", "Kościół")
+            ),
+            funFact = mapOf(
+                Translations.Lang.IT to "Castel Sant'Angelo ha un passaggio segreto chiamato \"Passetto di Borgo\" — un corridoio sopraelevato di 800 metri che lo collega al Vaticano. Papa Clemente VII lo usò per fuggire durante il Sacco di Roma nel 1527!",
+                Translations.Lang.ES to "El Castillo de Sant'Angelo tiene un pasaje secreto llamado \"Passetto di Borgo\" — un corredor elevado de 800 metros que lo conecta con el Vaticano. ¡El Papa Clemente VII lo usó para escapar durante el Saqueo de Roma en 1527!",
+                Translations.Lang.PL to "Zamek Świętego Anioła ma sekretne przejście zwane \"Passetto di Borgo\" — 800-metrowy podwyższony korytarz łączący go z Watykanem. Papież Klemens VII użył go do ucieczki podczas Złupienia Rzymu w 1527!"
+            )
+        ),
+        "navona" to QuestText(
+            question = mapOf(
+                Translations.Lang.IT to "Qual era lo scopo originale della forma allungata di Piazza Navona?",
+                Translations.Lang.ES to "¿Cuál era el propósito original de la forma alargada de la Piazza Navona?",
+                Translations.Lang.PL to "Jaki był pierwotny cel wydłużonego kształtu Piazza Navona?"
+            ),
+            options = mapOf(
+                Translations.Lang.IT to listOf("Era un mercato", "Fu costruita su uno stadio romano", "Fu progettata per le parate", "Era un porto fluviale"),
+                Translations.Lang.ES to listOf("Era un mercado", "Fue construida sobre un estadio romano", "Fue diseñada para desfiles", "Era un puerto fluvial"),
+                Translations.Lang.PL to listOf("Był to targ", "Została zbudowana na rzymskim stadionie", "Została zaprojektowana na parady", "Był to port rzeczny")
+            ),
+            funFact = mapOf(
+                Translations.Lang.IT to "Piazza Navona fu costruita sulle rovine dello Stadio di Domiziano (I secolo d.C.). Fino al XIX secolo, la piazza veniva regolarmente allagata nei weekend di agosto così che i romani potessero guazzare nell'acqua per sfuggire al caldo estivo!",
+                Translations.Lang.ES to "La Piazza Navona fue construida sobre las ruinas del Estadio de Domiciano (siglo I d.C.). ¡Hasta el siglo XIX, la plaza se inundaba regularmente los fines de semana de agosto para que los romanos pudieran chapotear para escapar del calor!",
+                Translations.Lang.PL to "Piazza Navona została zbudowana na ruinach Stadionu Domicjana (I w. n.e.). Aż do XIX wieku plac był regularnie zalewany w sierpniowe weekendy, aby Rzymianie mogli brodzić w wodzie i uciec od letniego upału!"
+            )
+        ),
+        "trastevere_emoji" to QuestText(
+            question = mapOf(
+                Translations.Lang.IT to "Quale affascinante quartiere romano rappresentano questi emoji?\n\n🍷🌙🎶🏘️✨",
+                Translations.Lang.ES to "¿Qué encantador barrio romano representan estos emojis?\n\n🍷🌙🎶🏘️✨",
+                Translations.Lang.PL to "Którą uroczą dzielnicę Rzymu reprezentują te emoji?\n\n🍷🌙🎶🏘️✨"
+            ),
+            funFact = mapOf(
+                Translations.Lang.IT to "Trastevere significa 'oltre il Tevere'. Nell'antica Roma era casa di immigrati e marinai. Oggi è il quartiere più bohémien di Roma — le sue stradine acciottolate sono ricoperte di edera e piene di musica dal vivo ogni sera!",
+                Translations.Lang.ES to "Trastevere significa 'al otro lado del Tíber'. En la Roma antigua era hogar de inmigrantes y marineros. Hoy es el barrio más bohemio de Roma — ¡sus estrechas calles empedradas están cubiertas de hiedra y llenas de música en vivo cada noche!",
+                Translations.Lang.PL to "Trastevere oznacza 'za Tybrem'. W starożytnym Rzymie mieszkali tam imigranci i marynarze. Dziś to najbardziej bohemiczna dzielnica Rzymu — wąskie brukowane uliczki porośnięte bluszczem i pełne muzyki na żywo każdego wieczoru!"
+            )
+        ),
+        "circus_maximus" to QuestText(
+            question = mapOf(
+                Translations.Lang.IT to "Quanti spettatori poteva contenere il Circo Massimo per le corse dei carri?",
+                Translations.Lang.ES to "¿Cuántos espectadores podía albergar el Circo Máximo para las carreras de carros?",
+                Translations.Lang.PL to "Ilu widzów mógł pomieścić Circus Maximus na wyścigi rydwanów?"
+            ),
+            funFact = mapOf(
+                Translations.Lang.IT to "Il Circo Massimo poteva ospitare 250.000 spettatori — oltre 3 volte il Colosseo! Le corse dei carri erano lo sport più popolare nell'antica Roma. I piloti erano celebrità e i tifosi si organizzavano in fazioni (Blu, Verdi, Rossi, Bianchi) che a volte causavano sommosse!",
+                Translations.Lang.ES to "¡El Circo Máximo podía albergar 250.000 espectadores — más de 3 veces el Coliseo! Las carreras de carros eran el deporte más popular. Los conductores eran celebridades y los fans se organizaban en facciones (Azules, Verdes, Rojos, Blancos) que a veces causaban disturbios.",
+                Translations.Lang.PL to "Circus Maximus mógł pomieścić 250.000 widzów — ponad 3 razy więcej niż Koloseum! Wyścigi rydwanów były najpopularniejszym sportem w starożytnym Rzymie. Woźnice byli celebrytami, a kibice organizowali się w fakcje (Niebieskich, Zielonych, Czerwonych, Białych), które czasem wywoływały zamieszki!"
+            )
+        ),
+        "catacombs_tf" to QuestText(
+            question = mapOf(
+                Translations.Lang.IT to "VERO o FALSO: Le catacombe sotterranee di Roma si estendono per oltre 150 chilometri — più della metro di Roma.",
+                Translations.Lang.ES to "VERDADERO o FALSO: Las catacumbas subterráneas de Roma se extienden más de 150 kilómetros — más que el metro de Roma.",
+                Translations.Lang.PL to "PRAWDA czy FAŁSZ: Podziemne katakumby Rzymu rozciągają się na ponad 150 kilometrów — dalej niż metro w Rzymie."
+            ),
+            options = mapOf(
+                Translations.Lang.IT to listOf("VERO ✅", "FALSO ❌"),
+                Translations.Lang.ES to listOf("VERDADERO ✅", "FALSO ❌"),
+                Translations.Lang.PL to listOf("PRAWDA ✅", "FAŁSZ ❌")
+            ),
+            funFact = mapOf(
+                Translations.Lang.IT to "È VERO! Le catacombe di Roma sono una città sotterranea dei morti, che si estende per oltre 150 km con circa 750.000 sepolture! Le sole Catacombe di San Callisto hanno 20 km di gallerie su 4 livelli.",
+                Translations.Lang.ES to "¡Es VERDADERO! Las catacumbas de Roma son una ciudad subterránea de los muertos, que se extiende más de 150 km con unas 750.000 tumbas. ¡Solo las Catacumbas de San Calixto tienen 20 km de túneles en 4 niveles!",
+                Translations.Lang.PL to "To PRAWDA! Katakumby Rzymu to podziemne miasto umarłych, rozciągające się na ponad 150 km z około 750.000 miejsc pochówku! Same Katakumby San Callisto mają 20 km tuneli na 4 poziomach."
+            )
+        ),
+        "borghese" to QuestText(
+            question = mapOf(
+                Translations.Lang.IT to "Quale scultore ha creato il famoso 'Apollo e Dafne' nella Galleria Borghese?",
+                Translations.Lang.ES to "¿Qué escultor creó el famoso 'Apolo y Dafne' en la Galería Borghese?",
+                Translations.Lang.PL to "Który rzeźbiarz stworzył słynne 'Apollo i Dafne' w Galerii Borghese?"
+            ),
+            funFact = mapOf(
+                Translations.Lang.IT to "Bernini scolpì 'Apollo e Dafne' quando aveva solo 24 anni! La scultura in marmo cattura l'esatto momento della trasformazione di Dafne in un albero di alloro — le dita che diventano foglie e la corteccia che cresce sulle gambe.",
+                Translations.Lang.ES to "¡Bernini esculpió 'Apolo y Dafne' cuando tenía solo 24 años! La escultura de mármol captura el momento exacto de la transformación de Dafne en un laurel — sus dedos convirtiéndose en hojas y corteza creciendo por sus piernas.",
+                Translations.Lang.PL to "Bernini wyrzeźbił 'Apollo i Dafne' mając zaledwie 24 lata! Marmurowa rzeźba uchwytuje dokładny moment przemiany Dafne w drzewo laurowe — palce zamieniające się w liście i kora rosnąca na nogach."
+            )
+        ),
+        "appian_way" to QuestText(
+            name = mapOf(Translations.Lang.IT to "Via Appia Antica", Translations.Lang.ES to "Vía Apia Antigua", Translations.Lang.PL to "Via Appia Antica"),
+            question = mapOf(
+                Translations.Lang.IT to "Completa il famoso detto sul sistema stradale romano:",
+                Translations.Lang.ES to "Completa el famoso dicho sobre el sistema de carreteras romano:",
+                Translations.Lang.PL to "Uzupełnij słynne powiedzenie o rzymskim systemie drogowym:"
+            ),
+            options = mapOf(
+                Translations.Lang.IT to listOf("Roma", "Vittoria", "Gloria", "Cesare"),
+                Translations.Lang.ES to listOf("Roma", "Victoria", "Gloria", "César"),
+                Translations.Lang.PL to listOf("Rzymu", "Zwycięstwa", "Chwały", "Cezara")
+            ),
+            fillBlank = mapOf(
+                Translations.Lang.IT to "Tutte le strade portano a ___",
+                Translations.Lang.ES to "Todos los caminos llevan a ___",
+                Translations.Lang.PL to "Wszystkie drogi prowadzą do ___"
+            ),
+            funFact = mapOf(
+                Translations.Lang.IT to "La Via Appia fu costruita nel 312 a.C. e chiamata 'Regina Viarum' (Regina delle Strade). Si estende per 563 km da Roma a Brindisi. Parti delle pietre originali sono ancora calpestabili oggi — rendendola vecchia di oltre 2.300 anni!",
+                Translations.Lang.ES to "La Vía Apia fue construida en 312 a.C. y llamada 'Regina Viarum' (Reina de los Caminos). Se extiende 563 km de Roma a Brindisi. ¡Partes de las piedras originales aún son transitables hoy, con más de 2.300 años!",
+                Translations.Lang.PL to "Via Appia została zbudowana w 312 r. p.n.e. i nazywana 'Regina Viarum' (Królowa Dróg). Rozciąga się na 563 km z Rzymu do Brindisi. Części oryginalnych kamieni można nadal chodzić — mają ponad 2300 lat!"
+            )
+        ),
+        "tiberina" to QuestText(
+            name = mapOf(Translations.Lang.IT to "Isola Tiberina", Translations.Lang.ES to "Isla Tiberina", Translations.Lang.PL to "Wyspa Tyberyjska"),
+            question = mapOf(
+                Translations.Lang.IT to "VERO o FALSO: Il Pons Fabricius che collega l'Isola Tiberina alla terraferma è il ponte più antico di Roma, costruito nel 62 a.C.",
+                Translations.Lang.ES to "VERDADERO o FALSO: El Pons Fabricius que conecta la Isla Tiberina con el continente es el puente más antiguo de Roma, construido en 62 a.C.",
+                Translations.Lang.PL to "PRAWDA czy FAŁSZ: Pons Fabricius łączący Wyspę Tyberyjską ze stałym lądem jest najstarszym mostem w Rzymie, zbudowanym w 62 r. p.n.e."
+            ),
+            options = mapOf(
+                Translations.Lang.IT to listOf("VERO ✅", "FALSO ❌"),
+                Translations.Lang.ES to listOf("VERDADERO ✅", "FALSO ❌"),
+                Translations.Lang.PL to listOf("PRAWDA ✅", "FAŁSZ ❌")
+            ),
+            funFact = mapOf(
+                Translations.Lang.IT to "È VERO! Il Pons Fabricius fu costruito nel 62 a.C. ed è ancora in piedi — rendendolo vecchio di oltre 2.000 anni! La leggenda dice che l'Isola Tiberina si formò quando i romani gettarono il raccolto di grano del tiranno Tarquinio nel fiume.",
+                Translations.Lang.ES to "¡Es VERDADERO! El Pons Fabricius fue construido en 62 a.C. y sigue en pie — ¡tiene más de 2.000 años! La leyenda dice que la Isla Tiberina se formó cuando los romanos arrojaron la cosecha de trigo del tirano Tarquinio al río.",
+                Translations.Lang.PL to "To PRAWDA! Pons Fabricius został zbudowany w 62 r. p.n.e. i nadal stoi — ma ponad 2000 lat! Legenda głosi, że Wyspa Tyberyjska powstała, gdy Rzymianie wrzucili zbiory pszenicy tyrana Tarkwiniusza do rzeki."
+            )
+        ),
+        "julius_emoji" to QuestText(
+            question = mapOf(
+                Translations.Lang.IT to "Quale famoso leader romano rappresentano questi emoji?\n\n🗡️👑🏛️📜⚔️",
+                Translations.Lang.ES to "¿Qué famoso líder romano representan estos emojis?\n\n🗡️👑🏛️📜⚔️",
+                Translations.Lang.PL to "Którego słynnego przywódcę rzymskiego reprezentują te emoji?\n\n🗡️👑🏛️📜⚔️"
+            ),
+            options = mapOf(
+                Translations.Lang.IT to listOf("Giulio Cesare", "Augusto", "Nerone", "Marco Aurelio"),
+                Translations.Lang.ES to listOf("Julio César", "Augusto", "Nerón", "Marco Aurelio"),
+                Translations.Lang.PL to listOf("Juliusz Cezar", "August", "Neron", "Marek Aureliusz")
+            ),
+            funFact = mapOf(
+                Translations.Lang.IT to "Giulio Cesare fu assassinato il 15 marzo 44 a.C. (le Idi di Marzo) da un gruppo di senatori al Teatro di Pompeo — che ora è il sito di Largo di Torre Argentina, dove si trova anche il famoso santuario dei gatti di Roma!",
+                Translations.Lang.ES to "Julio César fue asesinado el 15 de marzo de 44 a.C. (los Idus de Marzo) por un grupo de senadores en el Teatro de Pompeyo — que ahora es el sitio de Largo di Torre Argentina, ¡donde también está el famoso santuario de gatos de Roma!",
+                Translations.Lang.PL to "Juliusz Cezar został zamordowany 15 marca 44 r. p.n.e. (Idy Marcowe) przez grupę senatorów w Teatrze Pompejusza — który jest teraz Largo di Torre Argentina, gdzie znajduje się też słynne sanktuarium kotów Rzymu!"
+            )
+        ),
+        "mouth_truth" to QuestText(
+            name = mapOf(Translations.Lang.IT to "Bocca della Verità", Translations.Lang.ES to "Boca de la Verdad", Translations.Lang.PL to "Usta Prawdy"),
+            question = mapOf(
+                Translations.Lang.IT to "Secondo la leggenda, cosa succede se metti la mano nella Bocca della Verità e dici una bugia?",
+                Translations.Lang.ES to "Según la leyenda, ¿qué pasa si pones la mano en la Boca de la Verdad y dices una mentira?",
+                Translations.Lang.PL to "Według legendy, co się stanie, jeśli włożysz rękę w Usta Prawdy i powiesz kłamstwo?"
+            ),
+            options = mapOf(
+                Translations.Lang.IT to listOf("Ti trasformi in pietra", "La bocca ti morde la mano", "Senti un tuono", "La terra trema"),
+                Translations.Lang.ES to listOf("Te conviertes en piedra", "La boca te muerde la mano", "Escuchas un trueno", "La tierra tiembla"),
+                Translations.Lang.PL to listOf("Zamieniasz się w kamień", "Usta odgryzają ci rękę", "Słyszysz grzmot", "Ziemia się trzęsie")
+            ),
+            funFact = mapOf(
+                Translations.Lang.IT to "La Bocca della Verità è in realtà un antico coperchio di fogna romano, probabilmente raffigurante il dio del mare Oceano. La leggenda divenne famosa dopo il film 'Vacanze Romane' del 1953 con Audrey Hepburn e Gregory Peck — i turisti fanno ore di coda solo per metterci la mano!",
+                Translations.Lang.ES to "La Boca de la Verdad es en realidad una antigua tapa de alcantarilla romana, probablemente representando al dios del mar Océano. La leyenda se hizo mundialmente famosa después de la película 'Vacaciones en Roma' de 1953 con Audrey Hepburn y Gregory Peck.",
+                Translations.Lang.PL to "Usta Prawdy to tak naprawdę starożytna rzymska pokrywa ściekowa, prawdopodobnie przedstawiająca boga morza Okeanosa. Legenda stała się sławna po filmie 'Rzymskie Wakacje' z 1953 roku z Audrey Hepburn i Gregorym Peckiem — turyści stoją godzinami w kolejce, żeby włożyć rękę!"
+            )
+        )
+    )
+
+    fun getQuestion(questId: String, original: String): String {
+        val lang = Translations.currentLang
+        if (lang == Translations.Lang.EN) return original
+        return translations[questId]?.question?.get(lang) ?: original
+    }
+
+    fun getOptions(questId: String, original: List<String>): List<String> {
+        val lang = Translations.currentLang
+        if (lang == Translations.Lang.EN) return original
+        return translations[questId]?.options?.get(lang) ?: original
+    }
+
+    fun getFunFact(questId: String, original: String): String {
+        val lang = Translations.currentLang
+        if (lang == Translations.Lang.EN) return original
+        return translations[questId]?.funFact?.get(lang) ?: original
+    }
+
+    fun getFillBlank(questId: String, original: String?): String? {
+        if (original == null) return null
+        val lang = Translations.currentLang
+        if (lang == Translations.Lang.EN) return original
+        return translations[questId]?.fillBlank?.get(lang) ?: original
+    }
+
+    fun getName(questId: String, original: String): String {
+        val lang = Translations.currentLang
+        if (lang == Translations.Lang.EN) return original
+        return translations[questId]?.name?.get(lang) ?: original
+    }
 }
 
 // --- APP DATA ---
@@ -155,8 +710,8 @@ object PassportData {
 
     fun addStamp(stamp: PassportStamp, context: Context) {
         stamps.add(0, stamp)
-        earnedSwipes += 3
-        LearningManager.addBonusSwipes(context, 3)
+        earnedSwipes += 1
+        LearningManager.addBonusSwipes(context, 1)
     }
 }
 
@@ -579,69 +1134,164 @@ object LearningData {
         Phrase("Stop thief!", "Al ladro!", "al la-dro", "Emergency"),
         Phrase("I am diabetic", "Sono diabetico", "so-no dya-be-tee-ko", "Emergency"),
         Phrase("I am allergic to...", "Sono allergico a...", "so-no al-ler-jee-ko a", "Emergency"),
-        Phrase("I need medicine", "Ho bisogno di medicine", "o bee-zo-nyo dee me-dee-chee-ne", "Emergency")
+        Phrase("I need medicine", "Ho bisogno di medicine", "o bee-zo-nyo dee me-dee-chee-ne", "Emergency"),
+
+        // === EXPANDED: Nature ===
+        Phrase("Sky", "Cielo", "chye-lo", "Nature"),
+        Phrase("Cloud", "Nuvola", "noo-vo-la", "Nature"),
+        Phrase("Star", "Stella", "stel-la", "Nature"),
+        Phrase("River", "Fiume", "fyoo-me", "Nature"),
+        Phrase("Lake", "Lago", "la-go", "Nature"),
+        Phrase("Forest", "Foresta", "fo-res-ta", "Nature"),
+        Phrase("Field", "Campo", "kam-po", "Nature"),
+        Phrase("Garden", "Giardino", "jar-dee-no", "Nature"),
+
+        // === EXPANDED: Colors ===
+        Phrase("Orange (color)", "Arancione", "a-ran-cho-ne", "Colors"),
+        Phrase("Pink", "Rosa", "ro-za", "Colors"),
+        Phrase("Purple", "Viola", "vyo-la", "Colors"),
+        Phrase("Brown", "Marrone", "mar-ro-ne", "Colors"),
+        Phrase("Grey", "Grigio", "gree-jo", "Colors"),
+        Phrase("Gold", "Oro", "o-ro", "Colors"),
+        Phrase("Silver", "Argento", "ar-jen-to", "Colors"),
+        Phrase("Light blue", "Azzurro", "ad-dzoor-ro", "Colors"),
+
+        // === EXPANDED: Weather ===
+        Phrase("Sunny", "Soleggiato", "so-led-ja-to", "Weather"),
+        Phrase("Cloudy", "Nuvoloso", "noo-vo-lo-zo", "Weather"),
+        Phrase("Storm", "Temporale", "tem-po-ra-le", "Weather"),
+        Phrase("Fog", "Nebbia", "neb-bya", "Weather"),
+        Phrase("Temperature", "Temperatura", "tem-pe-ra-too-ra", "Weather"),
+        Phrase("Degrees", "Gradi", "gra-dee", "Weather"),
+        Phrase("Humid", "Umido", "oo-mee-do", "Weather"),
+        Phrase("Weather forecast", "Previsioni del tempo", "pre-vee-zyo-nee del tem-po", "Weather"),
+        Phrase("It's nice weather", "Fa bel tempo", "fa bel tem-po", "Weather"),
+
+        // === EXPANDED: Furniture ===
+        Phrase("Sofa", "Divano", "dee-va-no", "Furniture"),
+        Phrase("Wardrobe", "Armadio", "ar-ma-dyo", "Furniture"),
+        Phrase("Desk", "Scrivania", "skree-va-nya", "Furniture"),
+        Phrase("Shelf", "Scaffale", "skaf-fa-le", "Furniture"),
+        Phrase("Lamp", "Lampada", "lam-pa-da", "Furniture"),
+        Phrase("Mirror", "Specchio", "spek-kyo", "Furniture"),
+        Phrase("Carpet", "Tappeto", "tap-pe-to", "Furniture"),
+
+        // === EXPANDED: Rooms ===
+        Phrase("Living room", "Soggiorno", "sod-jor-no", "Rooms"),
+        Phrase("Dining room", "Sala da pranzo", "sa-la da pran-zo", "Rooms"),
+        Phrase("Balcony", "Balcone", "bal-ko-ne", "Rooms"),
+        Phrase("Garage", "Garage", "ga-razh", "Rooms"),
+        Phrase("Garden", "Giardino", "jar-dee-no", "Rooms"),
+        Phrase("Roof", "Tetto", "tet-to", "Rooms"),
+        Phrase("Stairs", "Scale", "ska-le", "Rooms"),
+
+        // === EXPANDED: Tech ===
+        Phrase("Battery", "Batteria", "bat-te-ree-a", "Tech"),
+        Phrase("Charger", "Caricatore", "ka-ree-ka-to-re", "Tech"),
+        Phrase("Photo", "Foto", "fo-to", "Tech"),
+        Phrase("Video", "Video", "vee-de-o", "Tech"),
+        Phrase("App", "App", "app", "Tech"),
+        Phrase("Password", "Password", "pas-sword", "Tech"),
+        Phrase("Download", "Scaricare", "ska-ree-ka-re", "Tech"),
+        Phrase("Upload", "Caricare", "ka-ree-ka-re", "Tech"),
+        Phrase("Screen", "Schermo", "sker-mo", "Tech"),
+
+        // === EXPANDED: Animals ===
+        Phrase("Horse", "Cavallo", "ka-val-lo", "Animals"),
+        Phrase("Cow", "Mucca", "mook-ka", "Animals"),
+        Phrase("Pig", "Maiale", "ma-ya-le", "Animals"),
+        Phrase("Rabbit", "Coniglio", "ko-neel-yo", "Animals"),
+        Phrase("Mouse", "Topo", "to-po", "Animals"),
+        Phrase("Duck", "Anatra", "a-na-tra", "Animals"),
+        Phrase("Butterfly", "Farfalla", "far-fal-la", "Animals"),
+        Phrase("Bee", "Ape", "a-pe", "Animals"),
+        Phrase("Wolf", "Lupo", "loo-po", "Animals"),
+        Phrase("Bear", "Orso", "or-so", "Animals"),
+
+        // === NEW: Culture & Sightseeing ===
+        Phrase("Museum", "Museo", "moo-ze-o", "Culture"),
+        Phrase("Exhibition", "Mostra", "mos-tra", "Culture"),
+        Phrase("Painting", "Quadro", "kwa-dro", "Culture"),
+        Phrase("Sculpture", "Scultura", "skool-too-ra", "Culture"),
+        Phrase("Fountain", "Fontana", "fon-ta-na", "Culture"),
+        Phrase("Ruins", "Rovine", "ro-vee-ne", "Culture"),
+        Phrase("Castle", "Castello", "kas-tel-lo", "Culture"),
+        Phrase("Tower", "Torre", "tor-re", "Culture"),
+        Phrase("Monument", "Monumento", "mo-noo-men-to", "Culture"),
+        Phrase("Ancient", "Antico", "an-tee-ko", "Culture"),
+        Phrase("Medieval", "Medievale", "me-dye-va-le", "Culture"),
+        Phrase("Renaissance", "Rinascimento", "ree-na-shee-men-to", "Culture"),
+        Phrase("Can I take a photo?", "Posso fare una foto?", "pos-so fa-re oo-na fo-to", "Culture"),
+        Phrase("Where is the entrance?", "Dov'è l'entrata?", "do-ve l-en-tra-ta", "Culture"),
+        Phrase("How much is the ticket?", "Quanto costa il biglietto?", "kwan-to kos-ta eel beel-yet-to", "Culture"),
+        Phrase("Guide", "Guida", "gwee-da", "Culture"),
+        Phrase("Audio guide", "Audioguida", "ow-dyo-gwee-da", "Culture"),
+        Phrase("Souvenir", "Souvenir", "soo-ve-neer", "Culture")
     )
 }
 
 object PlacesData {
     const val GENERIC_HISTORY = "Visit this place to unlock its history."
 
-    const val IMG_PIZZA = "https://upload.wikimedia.org/wikipedia/commons/a/a3/Eq_it-na_pizza-margherita_sep2005_sml.jpg"
-    const val IMG_PASTA = "https://upload.wikimedia.org/wikipedia/commons/2/22/Cacio_e_pepe.jpg"
-    const val IMG_GELATO = "https://upload.wikimedia.org/wikipedia/commons/3/31/Ice_Cream_Rome.jpg"
-    const val IMG_COFFEE = "https://upload.wikimedia.org/wikipedia/commons/4/46/Caffe_Sant_Eustachio.jpg"
-    const val IMG_APERITIVO = "https://upload.wikimedia.org/wikipedia/commons/1/17/Aperol_Spritz.jpg"
-    const val IMG_MALL = "https://upload.wikimedia.org/wikipedia/commons/c/c5/Galleria_Alberto_Sordi.JPG"
-    const val IMG_WATER = "https://upload.wikimedia.org/wikipedia/commons/1/1d/Nasoni_Roma.jpg"
-    const val IMG_WC = "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Public_toilet_symbol.svg/1024px-Public_toilet_symbol.svg.png"
-    const val IMG_PARK = "https://upload.wikimedia.org/wikipedia/commons/5/56/Villa_Borghese_September_2015-2a.jpg"
+    const val IMG_PIZZA = "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=400&h=300&fit=crop"
+    const val IMG_PASTA = "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=400&h=300&fit=crop"
+    const val IMG_GELATO = "https://images.unsplash.com/photo-1501443762994-82bd5dace89a?w=400&h=300&fit=crop"
+    const val IMG_COFFEE = "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400&h=300&fit=crop"
+    const val IMG_APERITIVO = "https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=400&h=300&fit=crop"
+    const val IMG_MALL = "https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?w=400&h=300&fit=crop"
+    const val IMG_WATER = "https://images.unsplash.com/photo-1548839140-29a749e1cf4d?w=400&h=300&fit=crop"
+    const val IMG_WC = "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=400&h=300&fit=crop"
+    const val IMG_PARK = "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=400&h=300&fit=crop"
+    const val IMG_NIGHTLIFE = "https://images.unsplash.com/photo-1566417713940-fe7c737a9ef2?w=400&h=300&fit=crop"
 
     val list = listOf(
         // === MONUMENTY & HISTORIA (70) ===
-        Place("Galleria Spada", "Optical Illusion.", "Famous 9-meter corridor that looks 35 meters long.", "https://en.wikipedia.org/wiki/Palazzo_Spada", "https://upload.wikimedia.org/wikipedia/commons/b/b3/Palazzo_Spada_Galleria_Prospettica.jpg", LatLng(41.8939, 12.4712), 4.6, "monuments", "5€", "08:30-19:30"),
-        Place("Teatro di Marcello", "The Mini-Colosseum.", "Ancient open-air theatre built by Augustus.", "https://en.wikipedia.org/wiki/Theatre_of_Marcellus", "https://upload.wikimedia.org/wikipedia/commons/1/1e/Teatro_di_Marcello.jpg", LatLng(41.8919, 12.4795), 4.6, "monuments", "Free View", "24h"),
-        Place("Santa Maria del Popolo", "Caravaggio Inside.", "Home to two of Caravaggio’s greatest masterpieces.", "https://en.wikipedia.org/wiki/Santa_Maria_del_Popolo", "https://upload.wikimedia.org/wikipedia/commons/4/4b/Santa_Maria_del_Popolo_Rome.jpg", LatLng(41.9114, 12.4764), 4.7, "monuments", "Free", "07:30-19:00", recommendation = "Must see"),
-        Place("San Luigi dei Francesi", "More Caravaggio.", "The Matthew cycle paintings in the Contarelli Chapel.", "https://en.wikipedia.org/wiki/San_Luigi_dei_Francesi", "https://upload.wikimedia.org/wikipedia/commons/d/d4/San_Luigi_dei_Francesi_Rome.jpg", LatLng(41.8996, 12.4748), 4.7, "monuments", "Free", "10:00-18:50"),
-        Place("Bramante Cloister", "Renaissance Peace.", "Hidden courtyard museum near Piazza Navona.", "https://en.wikipedia.org/wiki/Cloister_of_Bramante", "https://upload.wikimedia.org/wikipedia/commons/c/c5/Chiostro_di_Bramante_Rome.jpg", LatLng(41.9001, 12.4716), 4.6, "parks", "Free Entry", "10:00-19:00"),
-        Place("Doria Pamphilj Gallery", "Private Palace.", "Stunning gallery with over 400 Renaissance artworks.", "https://en.wikipedia.org/wiki/Doria_Pamphilj_Gallery", "https://upload.wikimedia.org/wikipedia/commons/5/52/Galleria_Doria_Pamphilj.jpg", LatLng(41.8978, 12.4815), 4.7, "monuments", "15€", "09:00-19:00"),
-        Place("Church of Sant'Ignazio", "The Fake Dome.", "Famous 3D fresco creating an illusion of a massive dome.", "https://en.wikipedia.org/wiki/Sant%27Ignazio,_Rome", "https://upload.wikimedia.org/wikipedia/commons/6/64/Sant%27Ignazio_Rome_finto_cupola.jpg", LatLng(41.8992, 12.4795), 4.8, "monuments", "Free", "09:00-23:30"),
-        Place("Palazzo Altemps", "Sculpture Heaven.", "Quiet Renaissance palace housing elite Roman sculptures.", "https://en.wikipedia.org/wiki/Palazzo_Altemps", "https://upload.wikimedia.org/wikipedia/commons/7/73/Palazzo_Altemps_Cortile.jpg", LatLng(41.9008, 12.4728), 4.7, "monuments", "10€", "09:00-19:45"),
-        Place("Villa Farnesina", "Raphael's Art.", "Renaissance villa with stunning mythological frescoes.", "https://en.wikipedia.org/wiki/Villa_Farnesina", "https://upload.wikimedia.org/wikipedia/commons/2/2a/Villa_Farnesina_Rome.jpg", LatLng(41.8935, 12.4675), 4.8, "monuments", "10€", "09:00-14:00"),
-        Place("Crypta Balbi", "City Layers.", "Museum showing how the city changed over 2,000 years.", "https://en.wikipedia.org/wiki/Crypta_Balbi", "https://upload.wikimedia.org/wikipedia/commons/4/4b/Crypta_Balbi_Entrance.jpg", LatLng(41.8938, 12.4785), 4.5, "monuments", "8€", "09:00-19:45"),
-        Place("Temple of Hadrian", "Roman Columns.", "11 massive ancient columns integrated into the Stock Exchange.", "https://en.wikipedia.org/wiki/Temple_of_Hadrian", "https://upload.wikimedia.org/wikipedia/commons/c/cc/Temple_of_Hadrian_Rome.jpg", LatLng(41.8998, 12.4788), 4.6, "monuments", "Free View", "24h"),
-        Place("Arch of Janus", "Four-Way Arch.", "The only quadrifrons triumphal arch preserved in Rome.", "https://en.wikipedia.org/wiki/Arch_of_Janus", "https://upload.wikimedia.org/wikipedia/commons/6/6e/Arco_di_Giano.jpg", LatLng(41.8892, 12.4828), 4.4, "monuments", "Free View", "24h"),
-        Place("Mausoleum of Augustus", "Emperor's Tomb.", "Recently reopened massive circular tomb of the first emperor.", "https://en.wikipedia.org/wiki/Mausoleum_of_Augustus", "https://upload.wikimedia.org/wikipedia/commons/2/2a/Mausoleo_di_Augusto_2021.jpg", LatLng(41.9061, 12.4765), 4.5, "monuments", "5€", "09:00-19:00"),
-        Place("Pasquino Statue", "Talking Statue.", "Ancient fragment where people post anonymous satirical poems.", "https://en.wikipedia.org/wiki/Pasquino", "https://upload.wikimedia.org/wikipedia/commons/4/4a/Pasquino_statue_Rome.jpg", LatLng(41.8978, 12.4722), 4.3, "monuments", "Free", "24h"),
-        Place("San Stefano Rotondo", "Circular Church.", "Stunning 5th-century round church with intense frescoes.", "https://en.wikipedia.org/wiki/Santo_Stefano_Rotondo", "https://upload.wikimedia.org/wikipedia/commons/2/2e/Santo_Stefano_Rotondo_Interior.jpg", LatLng(41.8848, 12.4965), 4.7, "monuments", "Free", "09:30-12:30, 15:30-18:30"),
-        Place("Largo di Torre Argentina", "Sacred Area.", "Site of Caesar's assassination and a famous cat sanctuary.", "https://en.wikipedia.org/wiki/Largo_di_Torre_Argentina", "https://upload.wikimedia.org/wikipedia/commons/8/80/Largo_di_Torre_Argentina.jpg", LatLng(41.8961, 12.4768), 4.5, "monuments", "5€ (Walkway)", "09:30-19:00"),
-        Place("Quirinal Palace", "Presidential Home.", "Official residence of the President of Italy on the highest hill.", "https://en.wikipedia.org/wiki/Quirinal_Palace", "https://upload.wikimedia.org/wikipedia/commons/3/3d/Palazzo_del_Quirinale.jpg", LatLng(41.9002, 12.4868), 4.7, "monuments", "10€ (Booking)", "09:30-16:00"),
-        Place("Basilica di St. Paul", "Outside the Walls.", "One of Rome's four major basilicas with stunning mosaics.", "https://en.wikipedia.org/wiki/Basilica_of_Saint_Paul_Outside_the_Walls", "https://upload.wikimedia.org/wikipedia/commons/0/0e/San_Paolo_fuori_le_mura_Rome.jpg", LatLng(41.8585, 12.4768), 4.9, "monuments", "Free", "07:00-18:30"),
-        Place("National Gallery", "Modern Art Hub.", "Grand museum of 19th and 20th century Italian art.", "https://en.wikipedia.org/wiki/Galleria_Nazionale_d%27Arte_Moderna", "https://upload.wikimedia.org/wikipedia/commons/0/07/Galleria_Nazionale_d%27Arte_Moderna_Rome.jpg", LatLng(41.9168, 12.4822), 4.6, "monuments", "10€", "09:00-19:00"),
-        Place("Appian Way Park", "Ancient Highway.", "Best preserved section of the 'Queen of Roads' with tombs.", "https://en.wikipedia.org/wiki/Appian_Way_Regional_Park", "https://upload.wikimedia.org/wikipedia/commons/9/93/Via_Appia_Antica.jpg", LatLng(41.8525, 12.5125), 4.9, "park", "Free", "24h"),
-        Place("Santa Maria in Trastevere", "Golden Mosaics.", "One of the oldest churches in Rome.", "https://en.wikipedia.org/wiki/Santa_Maria_in_Trastevere", "https://upload.wikimedia.org/wikipedia/commons/e/e0/Santa_Maria_in_Trastevere.jpg", LatLng(41.8895, 12.4705), 4.8, "monuments", "Free", "07:30-21:00"),
-        Place("San Giovanni in Laterano", "Rome's Cathedral.", "The official ecclesiastical seat of the Pope.", "https://en.wikipedia.org/wiki/Archbasilica_of_Saint_John_Lateran", "https://upload.wikimedia.org/wikipedia/commons/8/8c/San_Giovanni_in_Laterano.jpg", LatLng(41.8859, 12.5057), 4.8, "monuments", "Free", "07:00-18:30"),
-        Place("San Pietro in Vincoli", "Michelangelo's Moses.", "Famous for the horns of Moses statue.", "https://en.wikipedia.org/wiki/San_Pietro_in_Vincoli", "https://upload.wikimedia.org/wikipedia/commons/d/d4/Moses_Michelangelo_San_Pietro_in_Vincoli.jpg", LatLng(41.8938, 12.4931), 4.7, "monuments", "Free", "08:00-18:50"),
-        Place("Santa Sabina", "Early Christian.", "Beautiful wooden doors from 432 AD on Aventine.", "https://en.wikipedia.org/wiki/Santa_Sabina", "https://upload.wikimedia.org/wikipedia/commons/6/6c/Santa_Sabina_Interior.jpg", LatLng(41.8845, 12.4795), 4.8, "monuments", "Free", "07:30-19:00"),
-        Place("Bramante's Tempietto", "Renaissance Jewel.", "Small circular temple in San Pietro in Montorio.", "https://en.wikipedia.org/wiki/Tempietto_of_Bramante", "https://upload.wikimedia.org/wikipedia/commons/9/99/Tempietto_del_Bramante.jpg", LatLng(41.8892, 12.4655), 4.7, "monuments", "Free", "09:00-18:00"),
-        Place("Colosseum", "Iconic amphitheater.", "Ancient heart of Rome.", "https://en.m.wikipedia.org/wiki/Colosseum", "https://upload.wikimedia.org/wikipedia/commons/d/de/Colosseo_2020.jpg", LatLng(41.8902, 12.4922), 4.9, "monuments", "Ticket", "08:30-19:00", recommendation = "Must see"),
-        Place("Pantheon", "Ancient temple.", "Best preserved Roman building.", "https://en.m.wikipedia.org/wiki/Pantheon,_Rome", "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Pantheon_in_Rome.jpg/1200px-Pantheon_in_Rome.jpg", LatLng(41.8986, 12.4769), 4.9, "monuments", "5€", "09:00-19:00", recommendation = "Must see"),
-        Place("Trevi Fountain", "Baroque masterpiece.", "Legendary coin-tossing spot.", "https://en.m.wikipedia.org/wiki/Trevi_Fountain", "https://upload.wikimedia.org/wikipedia/commons/7/7e/Trevi_Fountain%2C_Rome%2C_Italy_2_-_May_2007.jpg", LatLng(41.9009, 12.4833), 4.8, "monuments", "Free", "24h", recommendation = "Must see"),
-        Place("Vatican Museums", "Papal Art.", "Home to Sistine Chapel.", "https://en.m.wikipedia.org/wiki/Vatican_Museums", "https://upload.wikimedia.org/wikipedia/commons/0/00/Musei_Vaticani_Spiral_Staircase_2012.jpg", LatLng(41.9065, 12.4536), 4.8, "monuments", "20€", "08:00-19:00"),
-        Place("Basilica di San Pietro", "Vatican Heart.", "Largest church globally.", "https://en.m.wikipedia.org/wiki/St._Peter%27s_Basilica", "https://upload.wikimedia.org/wikipedia/commons/f/f5/Basilica_di_San_Pietro_in_Vaticano_September_2015-1a.jpg", LatLng(41.9022, 12.4539), 4.9, "monuments", "Free", "07:00-19:10", recommendation = "Must see"),
-        Place("Foro Romano", "Ancient Center.", "Empire ruins.", "https://en.m.wikipedia.org/wiki/Roman_Forum", "https://upload.wikimedia.org/wikipedia/commons/5/5a/Forum_Romanum_Rom.jpg", LatLng(41.8925, 12.4853), 4.8, "monuments", "Ticket", "09:00-19:15", recommendation = "Must see"),
-        Place("Castel Sant'Angelo", "Hadrian's Tomb.", "Papal fortress.", "https://en.m.wikipedia.org/wiki/Castel_Sant%27Angelo", "https://upload.wikimedia.org/wikipedia/commons/5/52/Castel_Sant%27Angelo_%28Rome%29.jpg", LatLng(41.9031, 12.4663), 4.7, "monuments", "13€", "09:00-19:30"),
-        Place("Spanish Steps", "Famous stairs.", "Piazza di Spagna.", "https://en.m.wikipedia.org/wiki/Spanish_Steps", "https://upload.wikimedia.org/wikipedia/commons/6/6c/Spanish_Steps_Rome.jpg", LatLng(41.9057, 12.4823), 4.6, "monuments", "Free", "24h", recommendation = "Must see"),
-        Place("Altare della Patria", "White Monument.", "Victor Emmanuel II.", "https://en.m.wikipedia.org/wiki/Victor_Emmanuel_II_National_Monument", "https://upload.wikimedia.org/wikipedia/commons/9/9e/Altare_della_Patria_Rome.jpg", LatLng(41.8946, 12.4831), 4.6, "monuments", "Free", "09:30-19:30"),
-        Place("Piazza Navona", "Baroque Square.", "Bernini fountains.", "https://en.m.wikipedia.org/wiki/Piazza_Navona", "https://upload.wikimedia.org/wikipedia/commons/a/a2/Piazza_Navona_Rome.jpg", LatLng(41.8992, 12.4731), 4.7, "monuments", "Free", "24h", recommendation = "Must see"),
-        Place("Baths of Caracalla", "Imperial Spa.", "Massive ruins.", "https://en.m.wikipedia.org/wiki/Baths_of_Caracalla", "https://upload.wikimedia.org/wikipedia/commons/f/f4/Thermae_of_Caracalla_2014.jpg", LatLng(41.8788, 12.4927), 4.7, "parks", "8€", "09:00-19:00"),
-        Place("Janiculum Hill", "City View.", "Sunset lookout.", "https://en.wikipedia.org/wiki/Janiculum", "https://upload.wikimedia.org/wikipedia/commons/5/5f/Roma-gianicolo.jpg", LatLng(41.8913, 12.4616), 4.8, "parks", "Free", "24h"),
-        Place("Orange Garden", "Aventine View.", "Perfect park.", "https://en.wikipedia.org/wiki/Giardino_degli_Aranci", IMG_PARK, LatLng(41.8845, 12.4795), 4.9, "parks", "Free", "07:00-18:00"),
-        Place("Keyhole of Malta", "Secret View.", "Dome through a hole.", "https://en.wikipedia.org/wiki/Piazza_dei_Cavalieri_di_Malta", "https://upload.wikimedia.org/wikipedia/commons/e/eb/Buco_della_serratura.jpg", LatLng(41.8824, 12.4785), 4.7, "monuments", "Free", "24h", recommendation = "Must see"),
-        Place("Capuchin Crypt", "Bone Church.", "Mone decorations.", "https://en.wikipedia.org/wiki/Capuchin_Crypt", "https://upload.wikimedia.org/wikipedia/commons/2/23/Cripta_Cappuccini.jpg", LatLng(41.9048, 12.4885), 4.6, "monuments", "9€", "10:00-19:00"),
-        Place("Galleria Borghese", "Art Museum.", "Bernini statues.", "https://en.wikipedia.org/wiki/Galleria_Borghese", "https://upload.wikimedia.org/wikipedia/commons/e/e0/Galleria_Borghese_Rome.jpg", LatLng(41.9142, 12.4921), 4.8, "monuments", "15€", "09:00-19:00"),
-        Place("Largo Argentina", "Caesar's End.", "Cat sanctuary.", "https://en.wikipedia.org/wiki/Largo_di_Torre_Argentina", "https://upload.wikimedia.org/wikipedia/commons/8/80/Largo_di_Torre_Argentina.jpg", LatLng(41.8960, 12.4769), 4.5, "monuments", "Free", "24h"),
-        Place("MAXXI Museum", "Modern Art.", "Zaha Hadid design.", "https://en.wikipedia.org/wiki/MAXXI", "https://upload.wikimedia.org/wikipedia/commons/5/52/MAXXI_Museum_Rome.jpg", LatLng(41.9282, 12.4665), 4.5, "monuments", "12€", "11:00-19:00"),
-        Place("Galleria Sciarra", "Hidden Art.", "Courtyard frescoes.", "", "https://upload.wikimedia.org/wikipedia/commons/c/c1/Galleria_Sciarra_Rome.jpg", LatLng(41.8995, 12.4820), 4.7, "monuments", "Free", "09:00-20:00"),
+        Place("Galleria Spada", "Optical Illusion.", "Famous 9-meter corridor that looks 35 meters long.", "https://en.wikipedia.org/wiki/Palazzo_Spada", "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Palazzo_Spada_-_Rome%2C_Italy_-_DSC09752.jpg/600px-Palazzo_Spada_-_Rome%2C_Italy_-_DSC09752.jpg", LatLng(41.8939, 12.4712), 4.6, "monuments", "5€", "08:30-19:30"),
+        Place("Teatro di Marcello", "The Mini-Colosseum.", "Ancient open-air theatre built by Augustus.", "https://en.wikipedia.org/wiki/Theatre_of_Marcellus", "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Teatro_di_Marcello_intero.jpg/600px-Teatro_di_Marcello_intero.jpg", LatLng(41.8919, 12.4795), 4.6, "monuments", "Free View", "24h"),
+        Place("Santa Maria del Popolo", "Caravaggio Inside.", "Home to two of Caravaggio's greatest masterpieces.", "https://en.wikipedia.org/wiki/Santa_Maria_del_Popolo", "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/20140803_Basilica_of_Santa_Maria_del_Popolo_Rome_0191.jpg/600px-20140803_Basilica_of_Santa_Maria_del_Popolo_Rome_0191.jpg", LatLng(41.9114, 12.4764), 4.7, "monuments", "Free", "07:30-19:00", recommendation = "Must see"),
+        Place("San Luigi dei Francesi", "More Caravaggio.", "The Matthew cycle paintings in the Contarelli Chapel.", "https://en.wikipedia.org/wiki/San_Luigi_dei_Francesi", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/%C3%89glise_San_Luigi_Francesi_-_Rome_%28IT62%29_-_2021-08-28_-_2.jpg/600px-%C3%89glise_San_Luigi_Francesi_-_Rome_%28IT62%29_-_2021-08-28_-_2.jpg", LatLng(41.8996, 12.4748), 4.7, "monuments", "Free", "10:00-18:50"),
+        Place("Bramante Cloister", "Renaissance Peace.", "Hidden courtyard museum near Piazza Navona.", "https://en.wikipedia.org/wiki/Cloister_of_Bramante", "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Tempietto_del_Bramante_nel_Chiostro_di_S._Pietro_in_Montorio_di_roma.jpg/600px-Tempietto_del_Bramante_nel_Chiostro_di_S._Pietro_in_Montorio_di_roma.jpg", LatLng(41.9001, 12.4716), 4.6, "parks", "Free Entry", "10:00-19:00"),
+        Place("Doria Pamphilj Gallery", "Private Palace.", "Stunning gallery with over 400 Renaissance artworks.", "https://en.wikipedia.org/wiki/Doria_Pamphilj_Gallery", "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Palazzo_Doria_Pamphilj.jpg/600px-Palazzo_Doria_Pamphilj.jpg", LatLng(41.8978, 12.4815), 4.7, "monuments", "15€", "09:00-19:00"),
+        Place("Church of Sant'Ignazio", "The Fake Dome.", "Famous 3D fresco creating an illusion of a massive dome.", "https://en.wikipedia.org/wiki/Sant%27Ignazio,_Rome", "https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Triumph_of_St._Ignatius_of_Loyola%2C_ceiling_fresco_by_Andrea_Pozzo.jpg/600px-Triumph_of_St._Ignatius_of_Loyola%2C_ceiling_fresco_by_Andrea_Pozzo.jpg", LatLng(41.8992, 12.4795), 4.8, "monuments", "Free", "09:00-23:30"),
+        Place("Palazzo Altemps", "Sculpture Heaven.", "Quiet Renaissance palace housing elite Roman sculptures.", "https://en.wikipedia.org/wiki/Palazzo_Altemps", "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Palazzo_altemps%2C_cortile_07.JPG/600px-Palazzo_altemps%2C_cortile_07.JPG", LatLng(41.9008, 12.4728), 4.7, "monuments", "10€", "09:00-19:45"),
+        Place("Villa Farnesina", "Raphael's Art.", "Renaissance villa with stunning mythological frescoes.", "https://en.wikipedia.org/wiki/Villa_Farnesina", "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/La_villa_Farnesina_%28Rome%29_%2834029492720%29.jpg/600px-La_villa_Farnesina_%28Rome%29_%2834029492720%29.jpg", LatLng(41.8935, 12.4675), 4.8, "monuments", "10€", "09:00-14:00"),
+        Place("Crypta Balbi", "City Layers.", "Museum showing how the city changed over 2,000 years.", "https://en.wikipedia.org/wiki/Crypta_Balbi", "https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Pigna-s_Angelo_-_via_delle_Botteghe_oscure_-_crypta_Balbi_00738.JPG/600px-Pigna-s_Angelo_-_via_delle_Botteghe_oscure_-_crypta_Balbi_00738.JPG", LatLng(41.8938, 12.4785), 4.5, "monuments", "8€", "09:00-19:45"),
+        Place("Temple of Hadrian", "Roman Columns.", "11 massive ancient columns integrated into the Stock Exchange.", "https://en.wikipedia.org/wiki/Temple_of_Hadrian", "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Tempio_di_Adriano_-_esterno.jpg/600px-Tempio_di_Adriano_-_esterno.jpg", LatLng(41.8998, 12.4788), 4.6, "monuments", "Free View", "24h"),
+        Place("Arch of Janus", "Four-Way Arch.", "The only quadrifrons triumphal arch preserved in Rome.", "https://en.wikipedia.org/wiki/Arch_of_Janus", "https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Arch_of_Janus.jpg/600px-Arch_of_Janus.jpg", LatLng(41.8892, 12.4828), 4.4, "monuments", "Free View", "24h"),
+        Place("Mausoleum of Augustus", "Emperor's Tomb.", "Recently reopened massive circular tomb of the first emperor.", "https://en.wikipedia.org/wiki/Mausoleum_of_Augustus", "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Photographs_of_the_Mausoleum_of_Augustus_14_%28cropped%29.jpg/600px-Photographs_of_the_Mausoleum_of_Augustus_14_%28cropped%29.jpg", LatLng(41.9061, 12.4765), 4.5, "monuments", "5€", "09:00-19:00"),
+        Place("Pasquino Statue", "Talking Statue.", "Ancient fragment where people post anonymous satirical poems.", "https://en.wikipedia.org/wiki/Pasquino", "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Pasquino_02.jpg/600px-Pasquino_02.jpg", LatLng(41.8978, 12.4722), 4.3, "monuments", "Free", "24h"),
+        Place("San Stefano Rotondo", "Circular Church.", "Stunning 5th-century round church with intense frescoes.", "https://en.wikipedia.org/wiki/Santo_Stefano_Rotondo", "https://upload.wikimedia.org/wikipedia/commons/c/c8/SantoStefanoRotondoByRoeslerFranz.jpg", LatLng(41.8848, 12.4965), 4.7, "monuments", "Free", "09:30-12:30, 15:30-18:30"),
+        Place("Largo di Torre Argentina", "Sacred Area.", "Site of Caesar's assassination and a famous cat sanctuary.", "https://en.wikipedia.org/wiki/Largo_di_Torre_Argentina", "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Curia_of_Pompey.jpg/600px-Curia_of_Pompey.jpg", LatLng(41.8961, 12.4768), 4.5, "monuments", "5€ (Walkway)", "09:30-19:00"),
+        Place("Quirinal Palace", "Presidential Home.", "Official residence of the President of Italy on the highest hill.", "https://en.wikipedia.org/wiki/Quirinal_Palace", "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Quirinale_palazzo_e_obelisco_con_dioscuri_Roma.jpg/600px-Quirinale_palazzo_e_obelisco_con_dioscuri_Roma.jpg", LatLng(41.9002, 12.4868), 4.7, "monuments", "10€ (Booking)", "09:30-16:00"),
+
+        Place("National Gallery", "Modern Art Hub.", "Grand museum of 19th and 20th century Italian art.", "https://en.wikipedia.org/wiki/Galleria_Nazionale_d%27Arte_Moderna", "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Galleria_Nazionale_di_Arte_Moderna_-_Roma%2C_Italia.jpg/600px-Galleria_Nazionale_di_Arte_Moderna_-_Roma%2C_Italia.jpg", LatLng(41.9168, 12.4822), 4.6, "monuments", "10€", "09:00-19:00"),
+        Place("Santa Maria in Trastevere", "Golden Mosaics.", "One of the oldest churches in Rome.", "https://en.wikipedia.org/wiki/Santa_Maria_in_Trastevere", "https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/01_Santa_Maria_in_Trastevere_Facade.jpg/600px-01_Santa_Maria_in_Trastevere_Facade.jpg", LatLng(41.8895, 12.4705), 4.8, "monuments", "Free", "07:30-21:00"),
+        Place("San Giovanni in Laterano", "Rome's Cathedral.", "The official ecclesiastical seat of the Pope.", "https://en.wikipedia.org/wiki/Archbasilica_of_Saint_John_Lateran", "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/San_Giovanni_in_Laterano_2021.jpg/600px-San_Giovanni_in_Laterano_2021.jpg", LatLng(41.8859, 12.5057), 4.8, "monuments", "Free", "07:00-18:30"),
+        Place("San Pietro in Vincoli", "Michelangelo's Moses.", "Famous for the horns of Moses statue.", "https://en.wikipedia.org/wiki/San_Pietro_in_Vincoli", "https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/San_Pietro_in_Vincoli_-_esterno.jpg/600px-San_Pietro_in_Vincoli_-_esterno.jpg", LatLng(41.8938, 12.4931), 4.7, "monuments", "Free", "08:00-18:50"),
+        Place("Santa Sabina", "Early Christian.", "Beautiful wooden doors from 432 AD on Aventine.", "https://en.wikipedia.org/wiki/Santa_Sabina", "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Santa_Sabina_%28Rome%29_-_Esterno.jpg/600px-Santa_Sabina_%28Rome%29_-_Esterno.jpg", LatLng(41.8845, 12.4795), 4.8, "monuments", "Free", "07:30-19:00"),
+        Place("Bramante's Tempietto", "Renaissance Jewel.", "Small circular temple in San Pietro in Montorio.", "https://en.wikipedia.org/wiki/Tempietto_of_Bramante", "https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Tempietto_di_San_Pietro_in_Montorio.jpg/600px-Tempietto_di_San_Pietro_in_Montorio.jpg", LatLng(41.8892, 12.4655), 4.7, "monuments", "Free", "09:00-18:00"),
+        Place("Colosseum", "Iconic amphitheater.", "Ancient heart of Rome.", "https://en.m.wikipedia.org/wiki/Colosseum", "https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Colosseo_2020.jpg/600px-Colosseo_2020.jpg", LatLng(41.8902, 12.4922), 4.9, "monuments", "Ticket", "08:30-19:00", recommendation = "Must see"),
+        Place("Pantheon", "Ancient temple.", "Best preserved Roman building.", "https://en.m.wikipedia.org/wiki/Pantheon,_Rome", "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Pantheon_Rom_1_cropped.jpg/600px-Pantheon_Rom_1_cropped.jpg", LatLng(41.8986, 12.4769), 4.9, "monuments", "5€", "09:00-19:00", recommendation = "Must see"),
+        Place("Trevi Fountain", "Baroque masterpiece.", "Legendary coin-tossing spot.", "https://en.m.wikipedia.org/wiki/Trevi_Fountain", "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Trevi_Fountain_-_Roma.jpg/600px-Trevi_Fountain_-_Roma.jpg", LatLng(41.9009, 12.4833), 4.8, "monuments", "Free", "24h", recommendation = "Must see"),
+        Place("Vatican Museums", "Papal Art.", "Home to Sistine Chapel.", "https://en.m.wikipedia.org/wiki/Vatican_Museums", "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Basilica_di_San_Pietro_in_Vaticano_September_2015-1a.jpg/600px-Basilica_di_San_Pietro_in_Vaticano_September_2015-1a.jpg", LatLng(41.9065, 12.4536), 4.8, "monuments", "20€", "08:00-19:00"),
+        Place("Basilica di San Pietro", "Vatican Heart.", "Largest church globally.", "https://en.m.wikipedia.org/wiki/St._Peter%27s_Basilica", "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Basilica_di_San_Pietro_in_Vaticano_September_2015-1a.jpg/600px-Basilica_di_San_Pietro_in_Vaticano_September_2015-1a.jpg", LatLng(41.9022, 12.4539), 4.9, "monuments", "Free", "07:00-19:10", recommendation = "Must see"),
+        Place("Foro Romano", "Ancient Center.", "Empire ruins.", "https://en.m.wikipedia.org/wiki/Roman_Forum", "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Foro_Romano_Musei_Capitolini_Roma.jpg/600px-Foro_Romano_Musei_Capitolini_Roma.jpg", LatLng(41.8925, 12.4853), 4.8, "monuments", "Ticket", "09:00-19:15", recommendation = "Must see"),
+        Place("Castel Sant'Angelo", "Hadrian's Tomb.", "Papal fortress.", "https://en.m.wikipedia.org/wiki/Castel_Sant%27Angelo", "https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Castel_Sant%27_Angelo_Between_Leaves.jpg/600px-Castel_Sant%27_Angelo_Between_Leaves.jpg", LatLng(41.9031, 12.4663), 4.7, "monuments", "13€", "09:00-19:30"),
+        Place("Spanish Steps", "Famous stairs.", "Piazza di Spagna.", "https://en.m.wikipedia.org/wiki/Spanish_Steps", "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Piazza_di_Spagna_%28Rome%29_0004.jpg/600px-Piazza_di_Spagna_%28Rome%29_0004.jpg", LatLng(41.9057, 12.4823), 4.6, "monuments", "Free", "24h", recommendation = "Must see"),
+        Place("Altare della Patria", "White Monument.", "Victor Emmanuel II.", "https://en.m.wikipedia.org/wiki/Victor_Emmanuel_II_National_Monument", "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Piazza_Venezia_-_Il_Vittoriano.jpg/600px-Piazza_Venezia_-_Il_Vittoriano.jpg", LatLng(41.8946, 12.4831), 4.6, "monuments", "Free", "09:30-19:30"),
+        Place("Piazza Navona", "Baroque Square.", "Bernini fountains.", "https://en.m.wikipedia.org/wiki/Piazza_Navona", "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Piazza_Navona_%28Rome%29_at_night.jpg/600px-Piazza_Navona_%28Rome%29_at_night.jpg", LatLng(41.8992, 12.4731), 4.7, "monuments", "Free", "24h", recommendation = "Must see"),
+        Place("Baths of Caracalla", "Imperial Spa.", "Massive ruins.", "https://en.m.wikipedia.org/wiki/Baths_of_Caracalla", "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Baths_of_Caracalla%2C_facing_Caldarium.jpg/600px-Baths_of_Caracalla%2C_facing_Caldarium.jpg", LatLng(41.8788, 12.4927), 4.7, "parks", "8€", "09:00-19:00"),
+        Place("Janiculum Hill", "City View.", "Sunset lookout.", "https://en.wikipedia.org/wiki/Janiculum", "https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Janiculum.jpg/600px-Janiculum.jpg", LatLng(41.8913, 12.4616), 4.8, "parks", "Free", "24h"),
+        Place("Orange Garden", "Aventine View.", "Perfect park.", "https://en.wikipedia.org/wiki/Giardino_degli_Aranci", "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Dal_giardino_degli_aranci_-_tutta_roma.JPG/600px-Dal_giardino_degli_aranci_-_tutta_roma.JPG", LatLng(41.8845, 12.4795), 4.9, "parks", "Free", "07:00-18:00"),
+        Place("Keyhole of Malta", "Secret View.", "Dome through a hole.", "https://en.wikipedia.org/wiki/Piazza_dei_Cavalieri_di_Malta", "https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Il_buco_della_serratura_-_Priorato_dei_Cavalieri_di_Malta_%2825525267346%29.jpg/600px-Il_buco_della_serratura_-_Priorato_dei_Cavalieri_di_Malta_%2825525267346%29.jpg", LatLng(41.8824, 12.4785), 4.7, "monuments", "Free", "24h", recommendation = "Must see"),
+        Place("Capuchin Crypt", "Bone Church.", "Bone decorations.", "https://en.wikipedia.org/wiki/Capuchin_Crypt", "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Rom%2C_Santa_Maria_Immacolata_a_Via_Veneto%2C_Krypta_der_Kapuziner_1.jpg/600px-Rom%2C_Santa_Maria_Immacolata_a_Via_Veneto%2C_Krypta_der_Kapuziner_1.jpg", LatLng(41.9048, 12.4885), 4.6, "monuments", "9€", "10:00-19:00"),
+        Place("Galleria Borghese", "Art Museum.", "Bernini statues.", "https://en.wikipedia.org/wiki/Galleria_Borghese", "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Ingresso_monumentale_di_Villa_Borghese_a_Roma_su_piazzale_Flaminio_2018-02.jpg/600px-Ingresso_monumentale_di_Villa_Borghese_a_Roma_su_piazzale_Flaminio_2018-02.jpg", LatLng(41.9142, 12.4921), 4.8, "monuments", "15€", "09:00-19:00"),
+        Place("Largo Argentina", "Caesar's End.", "Cat sanctuary.", "https://en.wikipedia.org/wiki/Largo_di_Torre_Argentina", "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Curia_of_Pompey.jpg/600px-Curia_of_Pompey.jpg", LatLng(41.8960, 12.4769), 4.5, "monuments", "Free", "24h"),
+        Place("MAXXI Museum", "Modern Art.", "Zaha Hadid design.", "https://en.wikipedia.org/wiki/MAXXI", "https://upload.wikimedia.org/wikipedia/en/thumb/9/9b/MAXXI_%2827483747665%29.jpg/600px-MAXXI_%2827483747665%29.jpg", LatLng(41.9282, 12.4665), 4.5, "monuments", "12€", "11:00-19:00"),
+        Place("Galleria Sciarra", "Hidden Art.", "Courtyard frescoes.", "", "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Sciarra_Gallery_Rome_%2814348543%29.jpeg/600px-Sciarra_Gallery_Rome_%2814348543%29.jpeg", LatLng(41.8995, 12.4820), 4.7, "monuments", "Free", "09:00-20:00"),
+        // ── HIDDEN GEM MUST-SEE MONUMENTS ──
+        Place("Terrazza delle Quadrighe", "Golden Rooftop.", "Secret panoramic terrace atop Palazzo delle Esposizioni crowned by magnificent golden quadriga statues. One of Rome's most spectacular hidden viewpoints — the golden chariots gleam at sunset over the entire city skyline.", "https://en.wikipedia.org/wiki/Palazzo_delle_Esposizioni", "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Palazzo_delle_Esposizioni_Roma.jpg/600px-Palazzo_delle_Esposizioni_Roma.jpg", LatLng(41.8988, 12.4893), 4.9, "monuments", "Free View", "10:00-20:00", recommendation = "Must see"),
+        Place("Basilica di San Clemente", "Three Layers Deep.", "Mind-blowing archaeological lasagna: a 12th-century basilica built over a 4th-century church, built over a 1st-century Roman house and ancient Mithraeum temple. You literally descend through 2,000 years of history in one building.", "https://en.wikipedia.org/wiki/Basilica_of_San_Clemente", "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/San_Clemente_al_Laterano_exterior.jpg/600px-San_Clemente_al_Laterano_exterior.jpg", LatLng(41.8892, 12.4972), 4.9, "monuments", "10€", "09:00-12:30, 15:00-18:00", recommendation = "Must see"),
 
         // === PASTA / PIZZA(food) (60) ===
         Place("Checco er Carettiere", "Trastevere Tradition.", "Family-run institution since 1935.", "", IMG_PASTA, LatLng(41.8922, 12.4695), 4.4, "food", "€€€ • Pasta", "12:30-23:00"),
@@ -745,6 +1395,9 @@ object PlacesData {
         Place("Pizzeria Ostiense", "Local Soul.", "Industrial vibe.", "", IMG_PIZZA, LatLng(41.8715, 12.4825), 4.5, "food", "€ • Pizza", "18:30-23:30"),
         Place("La Gatta Mangiona", "Dough Masters.", "Experimental.", "", IMG_PIZZA, LatLng(41.8705, 12.4505), 4.5, "food", "€€ • Pizza", "19:00-23:30"),
         Place("Sforno", "Cacio e Pepe Pizza.", "Thick airy crust.", "", IMG_PIZZA, LatLng(41.8596, 12.5539), 4.6, "food", "€€ • Pizza", "19:30-23:30"),
+        // ── HIDDEN GEM RESTAURANTS ──
+        Place("Trattoria Da Cesare al Casaletto", "Legendary Local.", "The most authentic cacio e pepe in Rome, hidden in the residential Monteverde neighborhood. Zero tourists, only Romans who've been coming for decades. Their amatriciana is poetry. Reservation essential — they don't care about Instagram.", "", IMG_PASTA, LatLng(41.8718, 12.4512), 4.8, "food", "€€ • Pasta", "12:30-15:00, 19:30-23:00", recommendation = "Hidden Gem"),
+        Place("Osteria Fernanda", "Michelin Secret.", "Tucked in a quiet Trastevere alley, this tiny 30-seat osteria serves modern Roman cuisine that earned a Michelin star. Chef Davide Del Duca reinvents carbonara with egg yolk cream and guanciale dust. Pure genius.", "", IMG_PASTA, LatLng(41.8845, 12.4655), 4.9, "food", "€€€ • Pasta", "19:30-23:00", recommendation = "Hidden Gem"),
 
         // === GELATO (food) (50) ===\
         Place("Gelateria del Viale", "Smallest Shop.", "Tiny spot in Trastevere with huge flavors.", "", IMG_GELATO, LatLng(41.8895, 12.4705), 4.8, "food", "€ • Gelato", "11:00-22:00"),
@@ -849,6 +1502,30 @@ object PlacesData {
         Place("Salotto 42", "Hadrian View.", "Chic lounge.", "", IMG_APERITIVO, LatLng(41.8997, 12.4789), 4.4, "aperitivo", "€€€ • Aperitivo", "10:30-02:00"),
         Place("Bar San Calisto", "Real Soul.", "Cheap beer.", "", IMG_APERITIVO, LatLng(41.8883, 12.4704), 4.5, "aperitivo", "€ • Aperitivo", "06:00-02:00"),
         Place("The Court", "Colosseum Front.", "Luxury view.", "", IMG_APERITIVO, LatLng(41.8905, 12.4935), 4.6, "aperitivo", "€€€€ • Rooftop", "18:00-01:00"),
+        // ── HIDDEN GEM DRINKS ──
+        Place("Bartoló", "Hidden Wine Cave.", "Underground natural wine bar in Ostiense where Roman sommeliers drink after their shifts. No sign outside — just a small door next to a vintage shop. Ask for their orange wine flights and house-cured meats. Pure local magic.", "", IMG_APERITIVO, LatLng(41.8695, 12.4785), 4.8, "aperitivo", "€€ • Natural Wine", "18:00-01:00", recommendation = "Hidden Gem"),
+        Place("Il Barretto", "Secret Garden Bar.", "Tiny courtyard cocktail bar hidden behind an unmarked door on Via del Garofano. Only 20 seats surrounded by jasmine and fairy lights. Their Negroni Sbagliato with prosecco from Veneto is legendary among Roman bartenders.", "", IMG_APERITIVO, LatLng(41.9065, 12.4795), 4.7, "aperitivo", "€€€ • Cocktails", "19:00-02:00", recommendation = "Hidden Gem"),
+
+        // === NIGHTLIFE CLUBS & BARS (nightlife) ===
+        Place("Goa Club", "Techno Temple.", "Rome's legendary electronic music club in Ostiense.", "", IMG_NIGHTLIFE, LatLng(41.8677, 12.4811), 4.5, "nightlife", "€€€ • Club", "23:00-05:00"),
+        Place("Lanificio 159", "Industrial Rave.", "Massive warehouse club with live music and DJs in Pietralata.", "", IMG_NIGHTLIFE, LatLng(41.9195, 12.5385), 4.4, "nightlife", "€€ • Club", "22:00-04:00"),
+        Place("Alibi Club", "Testaccio Icon.", "Gay-friendly club, open to everyone, great rooftop.", "", IMG_NIGHTLIFE, LatLng(41.8765, 12.4755), 4.3, "nightlife", "€€ • Club", "23:00-05:00"),
+        Place("Vinile", "Retro Party.", "60s/70s/80s vibes with live music and dinner-show.", "", IMG_NIGHTLIFE, LatLng(41.8695, 12.4795), 4.6, "nightlife", "€€€ • Club", "20:00-04:00"),
+        Place("Qube Club", "Mega Venue.", "Multi-floor electronic music megaclub near Tiburtina.", "", IMG_NIGHTLIFE, LatLng(41.9108, 12.5288), 4.2, "nightlife", "€€ • Club", "23:00-05:00"),
+        Place("Rashomon", "Underground.", "Alternative music and experimental DJ sets in Pigneto.", "", IMG_NIGHTLIFE, LatLng(41.8892, 12.5245), 4.5, "nightlife", "€€ • Club", "22:00-04:00"),
+        Place("Circolo degli Illuminati", "Elite Club.", "Top international DJs, premium techno in Ostiense.", "", IMG_NIGHTLIFE, LatLng(41.8682, 12.4818), 4.4, "nightlife", "€€€ • Club", "23:00-06:00"),
+        Place("Salotto 42", "Chic Lounge.", "Design cocktail bar next to the Temple of Hadrian.", "", IMG_NIGHTLIFE, LatLng(41.8997, 12.4789), 4.4, "nightlife", "€€€ • Lounge", "10:30-02:00"),
+        Place("Ice Club Roma", "Frozen Bar.", "Everything is made of ice — walls, glasses, bar!", "", IMG_NIGHTLIFE, LatLng(41.9028, 12.4780), 4.2, "nightlife", "€€€ • Experience", "17:00-02:00"),
+        Place("Piper Club", "Historic Venue.", "Open since 1965 — Rome's oldest nightclub still running.", "", IMG_NIGHTLIFE, LatLng(41.9255, 12.4935), 4.3, "nightlife", "€€€ • Club", "23:00-05:00"),
+        Place("Shari Vari Playhouse", "Cocktail Club.", "Live DJ sets and creative cocktails near Via Veneto.", "", IMG_NIGHTLIFE, LatLng(41.9045, 12.4868), 4.5, "nightlife", "€€€ • Club", "22:00-04:00"),
+        Place("Santos Social Club", "Rooftop Party.", "Open-air dance floor with stunning Rome panorama.", "", IMG_NIGHTLIFE, LatLng(41.8972, 12.5145), 4.5, "nightlife", "€€€ • Rooftop", "21:00-04:00"),
+
+        // === SECRET QUEST REWARD PLACES (secret) ===
+        // Only visible after completing all quests — 2 hidden gem sights + 2 amazing food spots
+        Place("Aventine Keyhole", "🔑 Secret Gem.", "Peer through the Knights of Malta keyhole for a perfectly framed view of St. Peter's dome through a garden tunnel.", "", "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Piazza_dei_Cavalieri_di_Malta.jpg/600px-Piazza_dei_Cavalieri_di_Malta.jpg", LatLng(41.8826, 12.4796), 4.9, "secret", "Free", "24h", recommendation = "🏆 Quest Reward"),
+        Place("Quartiere Coppedè", "🔑 Secret Gem.", "A fairy-tale Art Nouveau neighborhood hidden in plain sight. Unreal arches, frescoes, and a spider chandelier!", "", "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Quartiere_Coppede_Roma.jpg/600px-Quartiere_Coppede_Roma.jpg", LatLng(41.9198, 12.5065), 4.8, "secret", "Free", "24h", recommendation = "🏆 Quest Reward"),
+        Place("Supplizio", "🍴 Secret Eats.", "The world's best supplì (Roman fried rice balls) in a tiny hidden shop near Navona. Life-changing street food!", "", "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&h=300&fit=crop", LatLng(41.8972, 12.4725), 4.9, "secret", "€ • Street Food", "12:00-22:00", recommendation = "🏆 Quest Reward"),
+        Place("Roscioli Bakery", "🍴 Secret Eats.", "Not the famous restaurant — the secret bakery next door! Best pizza bianca and pastries in Rome at dawn.", "", "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=400&h=300&fit=crop", LatLng(41.8935, 12.4738), 4.8, "secret", "€ • Bakery", "06:00-20:00", recommendation = "🏆 Quest Reward"),
 
         // === WATER & WC (70) ===
         Place("WC: Barberini Metro", "Underground.", "Inside the Metro A entrance hall.", "", IMG_WC, LatLng(41.9035, 12.4885), 3.0, "wc", "1.00€", "06:00-23:00"),

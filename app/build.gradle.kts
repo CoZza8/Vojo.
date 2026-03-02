@@ -35,6 +35,7 @@
 
         buildFeatures {
             compose = true
+            buildConfig = true
         }
     }
 
@@ -67,9 +68,12 @@
         debugImplementation(libs.androidx.compose.ui.tooling)
         debugImplementation(libs.androidx.compose.ui.test.manifest)
         implementation("io.coil-kt:coil-compose:2.7.0")
+        implementation("io.coil-kt:coil-gif:2.7.0")
         implementation("androidx.browser:browser:1.8.0")
         implementation("io.github.sceneview:arsceneview:2.2.1")
         implementation("com.squareup.okhttp3:okhttp:4.12.0")
         implementation("com.google.android.gms:play-services-ads:23.0.0")
         implementation("androidx.datastore:datastore-preferences:1.0.0")
+        implementation("androidx.work:work-runtime-ktx:2.9.1")
+        implementation("com.android.billingclient:billing-ktx:6.2.0")
     }

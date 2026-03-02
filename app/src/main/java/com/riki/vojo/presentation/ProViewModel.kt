@@ -23,10 +23,10 @@ class ProViewModel(
 
     // Available avatars
     val proAvatars = listOf(
-        AvatarItem(id = 0, name = "Avatar 1", resId = R.drawable.glad),
-        AvatarItem(id = 1, name = "Avatar 2", resId = R.drawable.peter),
-        AvatarItem(id = 2, name = "Avatar 3", resId = R.drawable.pizza  ),
-        AvatarItem(id = 3, name = "Avatar 4", resId = R.drawable.italianflag)
+        AvatarItem(id = 4, name = "Avatar 1", resId = R.drawable.glad),
+        AvatarItem(id = 5, name = "Avatar 2", resId = R.drawable.peter),
+        AvatarItem(id = 6, name = "Avatar 3", resId = R.drawable.pizza  ),
+        AvatarItem(id = 7, name = "Avatar 4", resId = R.drawable.italianflag)
     )
 
     val freeAvatars = listOf(
@@ -37,7 +37,11 @@ class ProViewModel(
     )
 
     val availableAvatars: List<AvatarItem>
-        get() = if (_isProUser.value) proAvatars else freeAvatars
+        get() = if (_isProUser.value) {
+            freeAvatars + proAvatars
+        } else {
+            freeAvatars
+        }
 
     init {
         viewModelScope.launch {
@@ -59,8 +63,17 @@ class ProViewModel(
         }
     }
 
+    /** Debug-only: toggle PRO on/off for testing */
+    fun toggleProDebug() {
+        viewModelScope.launch {
+            val current = _isProUser.value
+            userPreferencesRepository.setProUser(!current)
+        }
+    }
+
     fun selectAvatar(index: Int) {
-        if (_isProUser.value || index == 0) {
+        val isFreeAvatar = freeAvatars.any { it.id == index }
+        if (_isProUser.value || isFreeAvatar) {
             viewModelScope.launch {
                 userPreferencesRepository.setSelectedAvatarIndex(index)
             }
@@ -68,7 +81,7 @@ class ProViewModel(
     }
 }
 
-// To jest Fabryka, która zastępuje Hilta i tworzy nasz ViewModel
+
 class ProViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ProViewModel::class.java)) {
